@@ -9,9 +9,9 @@ export default class LoginContainer extends Component {
       waiter_id: "",
       password: "",
       valid: false,
-
     }
     this.main_url = props.main_url;
+    this.validateLogin = props.validateLogin;
   }
   handleLogin = () => {
     const {waiter_id, password} = this.state;
@@ -29,7 +29,7 @@ export default class LoginContainer extends Component {
       }).then((response)=> response.json())
               .then((responseJson)=>{
                 //var  alert_text = responseJson.result + " " + responseJson.password;
-                //Alert.alert(alert_text);
+                //Alert.alert(alert_text)
                 this.validateWaiter(responseJson);
               }).catch((error) => {
                 Alert.alert(error);
@@ -40,8 +40,7 @@ export default class LoginContainer extends Component {
     if (result_json.result>0){
       const {password} = this.state;
       if (password === result_json.password){
-        this.setState({valid: true});
-        Alert.alert('You are logged in!');
+        this.validateLogin();
       }
       else {
         Alert.alert('Your password is incorrect!');
