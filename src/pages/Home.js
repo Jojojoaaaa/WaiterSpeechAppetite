@@ -1,7 +1,10 @@
 import React, {Component}from 'react';
 import HomeContainer from '../containers/HomeContainer';
-import SpeechAndroid from 'react-native-android-voice';
-
+import {
+    SpeechRecognizer,
+    RecognizerIntent,
+    RecognitionListener
+  } from 'react-native-android-speech-recognizer';
 
 export default class Home extends Component {
     constructor (props){

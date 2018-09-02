@@ -32,7 +32,8 @@ export default class LoginContainer extends Component {
                 //Alert.alert(alert_text)
                 this.validateWaiter(responseJson);
               }).catch((error) => {
-                Alert.alert(error);
+                Alert.alert('There seems to be a problem! \n' +
+                'Make sure you are connected to the server and that the server is running.');
               });
 
   }
