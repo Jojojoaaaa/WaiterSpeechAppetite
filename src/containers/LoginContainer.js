@@ -1,8 +1,10 @@
 import React, {Component}from 'react';
 import LoginComponent from '../components/LoginComponent';
 import {Alert} from 'react-native';
+import { withRouter } from 'react-router-native'
+import {MAIN_URL, LOGIN} from '../constants/urls';
 
-export default class LoginContainer extends Component {
+class LoginContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -10,13 +12,10 @@ export default class LoginContainer extends Component {
       password: "",
       valid: false,
     }
-    this.main_url = props.main_url;
-    this.validateLogin = props.validateLogin;
   }
   handleLogin = () => {
     const {waiter_id, password} = this.state;
-
-    fetch(this.main_url+'login.php', 
+    fetch(MAIN_URL + LOGIN, 
       {
         method: 'POST',
         headers: {
@@ -28,8 +27,6 @@ export default class LoginContainer extends Component {
         })
       }).then((response)=> response.json())
               .then((responseJson)=>{
-                //var  alert_text = responseJson.result + " " + responseJson.password;
-                //Alert.alert(alert_text)
                 this.validateWaiter(responseJson);
               }).catch((error) => {
                 Alert.alert('There seems to be a problem! \n' +
@@ -41,14 +38,14 @@ export default class LoginContainer extends Component {
     if (result_json.result>0){
       const {password} = this.state;
       if (password === result_json.password){
-        this.validateLogin();
+        this.props.history.push('/'+this.state.waiter_id);
       }
       else {
         Alert.alert('Your password is incorrect!');
       }
     }
     else {
-      Alert.alert('Waiter ID does not exist');
+      Alert.alert('Waiter ID does not exist! Please try again!');
     }
   }
   handleChange = (name, value) => {
@@ -64,5 +61,6 @@ export default class LoginContainer extends Component {
     );
   }
 }
+export default withRouter(LoginContainer);
 
 

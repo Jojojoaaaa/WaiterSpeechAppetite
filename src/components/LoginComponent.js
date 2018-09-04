@@ -25,7 +25,7 @@ export default function LoginComponent(props) {
                 />
             <Link to = "/">
                 <Button 
-                    onPress = {handleLogin}
+                    onPress = {() => handleLogin()}
                     title="Login"  
                     color = 'red'/>
             </Link>

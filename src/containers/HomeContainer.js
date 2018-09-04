@@ -6,13 +6,12 @@ import {
   } from 'react-native-android-speech-recognizer';
 import {View, Alert, Text} from 'react-native';
 import HomeComponent from '../components/HomeComponent';
-//import * as speech_commands from '../speech_commands/speech_commands';
+import * as  commands from '../constants/speech_commands';
 
 
 export default class HomeContainer extends Component {
     constructor(props) {
         super(props)
-        this.main_url = props.main_url;
         this.state ={
           loading: false
         }
