@@ -3,7 +3,7 @@ import Login from './src/pages/Login';
 import Home from './src/pages/Home'
 import { NativeRouter, Route, Link, Redirect, Switch } from 'react-router-native'
 import { Alert, View } from 'react-native';
-
+//hfghggh
 export default class App extends Component {
   constructor(props) {
     super(props);
