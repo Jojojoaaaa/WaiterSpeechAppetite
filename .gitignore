@@ -3,9 +3,6 @@
 # expo
 .expo/
 
-# dependencies
-/node_modules
-
 # misc
 .env.local
 .env.development.local
@@ -13,8 +10,6 @@
 .env.production.local
 
 npm-debug.log*
-
-
 
 # OSX
 .DS_Store
@@ -56,11 +51,11 @@ local.properties
 
 # node.js
 node_modules/
-npm-debug.log
+node_modules\
 
 # BUCK
 buck-out/
-\.buckd/
+/.buckd/
 android/app/libs
 android/keystores/debug.keystore
 
