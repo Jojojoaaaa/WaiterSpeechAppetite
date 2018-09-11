@@ -1,9 +1,13 @@
 import React, {Component}from 'react';
+import { createStore } from 'redux';
+
+import { NativeRouter, Route, Redirect, Switch } from 'react-router-native';
+import { Provider } from 'react-redux';
+
 import Login from './src/pages/Login';
 import Home from './src/pages/Home'
-import { NativeRouter, Route, Link, Redirect, Switch } from 'react-router-native'
 import { Alert, View } from 'react-native';
-//hfghggh
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +20,7 @@ export default class App extends Component {
           <Switch>
             <Route exact path="/" render={()=> <Redirect to="/login"/>}/>
             <Route exact path="/login" component = {Login}/>
-            <Route exact path="/:waiterID" component ={Home}/>
+            <Route exact path="/home" component ={Home}/>
           </Switch>
         </View>
       </NativeRouter>  

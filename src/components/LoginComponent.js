@@ -3,9 +3,7 @@ import { Link } from 'react-router-native'
 import {TextInput, Text , View, Button} from 'react-native';
 
 export default function LoginComponent(props) {
-    const {waiter_id,
-            password, 
-            handleLogin,
+    const { handleLogin,
             handleChange,
             } = props;
 

@@ -2,7 +2,8 @@ import React, {Component}from 'react';
 import LoginComponent from '../components/LoginComponent';
 import {Alert} from 'react-native';
 import { withRouter } from 'react-router-native'
-import {MAIN_URL, LOGIN} from '../constants/urls';
+import * as url from '../constants/urls';
+import axios from '../axios';
 
 class LoginContainer extends Component {
   constructor(props){
@@ -15,30 +16,40 @@ class LoginContainer extends Component {
   }
   handleLogin = () => {
     const {waiter_id, password} = this.state;
-    fetch(MAIN_URL + LOGIN, 
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          waiter_id: waiter_id
-        })
-      }).then((response)=> response.json())
-              .then((responseJson)=>{
-                this.validateWaiter(responseJson);
-              }).catch((error) => {
-                Alert.alert('There seems to be a problem! \n' +
-                'Make sure you are connected to the server and that the server is running.');
-              });
+
+    axios.post(url.LOGIN, {waiter_id: waiter_id})
+      .then(response => {
+        this.validateWaiter(response.data)
+      })
+        .catch(error => {
+          Alert.alert('There seems to be a problem! \n' +
+          'Make sure you are connected to the server and that the server is running.');
+        });
+
+    // fetch(MAIN_URL + LOGIN, 
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'applications/json',
+    //       'Content-type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       waiter_id: waiter_id
+    //     })
+    //   }).then((response)=> response.json())
+    //           .then((responseJson)=>{
+    //             this.validateWaiter(responseJson);
+    //           }).catch((error) => {
+    //             Alert.alert('There seems to be a problem! \n' +
+    //             'Make sure you are connected to the server and that the server is running.');
+    //           });
 
   }
   validateWaiter = (result_json) => {
     if (result_json.result>0){
       const {password} = this.state;
       if (password === result_json.password){
-        this.props.history.push('/'+this.state.waiter_id);
+        this.props.history.push('/');
       }
       else {
         Alert.alert('Your password is incorrect!');
@@ -54,8 +65,6 @@ class LoginContainer extends Component {
   render() {
     return (
       <LoginComponent
-        waiter_id = {this.state.waiter_id}
-        password = {this.state.password}
         handleLogin = {this.handleLogin}
         handleChange = {this.handleChange}/>
     );

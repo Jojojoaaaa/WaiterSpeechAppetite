@@ -19,12 +19,13 @@ export default class HomeContainer extends Component {
     }
     componentDidMount () {
     }
+   
     initializeSpeechRecognizer = () => {
       const speech_recognizer = options => new Promise(async (resolve, reject) => {
         //check if available
         const available = await SpeechRecognizer.isRecognitionAvailable();
         if (!available) {
-          reject("Speech recognizer is available");
+          reject("Speech recognizer is not available");
         }
         //sets up the processing of recognized words
         const speech_listener = await SpeechRecognizer.createSpeechRecognizer();
@@ -36,6 +37,11 @@ export default class HomeContainer extends Component {
             resolve(speech_results);
           }
         });
+        //
+        //
+        //start listening on button only
+        //
+        //
         speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});          
       });
       //defines what to do with results
@@ -74,7 +80,7 @@ export default class HomeContainer extends Component {
 
     verifySpeech = (speech_results) => {
       console.log(speech_results);
-      if (speech_results.includes('CREATE ORDER')) 
+      if (speech_results.includes(commands.CREATE_ORDER)) 
         {
           Alert.alert('You can now create order');
         }
@@ -92,10 +98,8 @@ export default class HomeContainer extends Component {
         Alert.alert('Loading...');
       }
         return (
-      
             <HomeComponent
                 speechHandler ={this.speechHandler}/>
-      
         )
     }
 }

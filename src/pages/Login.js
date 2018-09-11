@@ -2,9 +2,9 @@ import React, {Component}from 'react';
 import LoginContainer from '../containers/LoginContainer';
 
 export default class Login extends Component {
-    constructor(props){
-        super(props)
-    }
+    // constructor(props){
+    //     super(props)
+    // }
   render() {
     return (
         <LoginContainer />
