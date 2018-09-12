@@ -4,22 +4,25 @@ import {
     RecognizerIntent,
     RecognitionListener
   } from 'react-native-android-speech-recognizer';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-native'
+
 import {View, Alert, Text} from 'react-native';
+
 import HomeComponent from '../components/HomeComponent';
 import * as  commands from '../constants/speech_commands';
+import * as  routes from '../constants/routes';
 
 
-export default class HomeContainer extends Component {
-    constructor(props) {
-        super(props)
-        this.state ={
-          loading: false
-        }
-      
+
+class HomeContainer extends Component {
+
+    componentWillMount () {
+      console.log(this.props);
+      if (!this.props.auth) {
+        this.props.history.push(routes.LOGIN);
+      }
     }
-    componentDidMount () {
-    }
-   
     initializeSpeechRecognizer = () => {
       const speech_recognizer = options => new Promise(async (resolve, reject) => {
         //check if available
@@ -37,24 +40,17 @@ export default class HomeContainer extends Component {
             resolve(speech_results);
           }
         });
-        //
-        //
-        //start listening on button only
-        //
-        //
         speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});          
       });
       //defines what to do with results
       speech_recognizer().then(speech_results => {
-        this.setState({loading: true});
         this.verifySpeech(speech_results);
       }).catch(error => {
         console.log(error);
         Alert.alert('Something went wrong...\n'+ this.findError(error));     
-        this.setState({loading: false}); 
       });
     }
-
+    //transfer to constants
     findError = (error_code) => {
       switch (error_code) {
         case 1:
@@ -82,24 +78,30 @@ export default class HomeContainer extends Component {
       console.log(speech_results);
       if (speech_results.includes(commands.CREATE_ORDER)) 
         {
-          Alert.alert('You can now create order');
+          this.props.history.push(routes.ORDER_ACTIVITY);
         }
       else {
         Alert.alert('Please try again...');
       }
-      this.setState({loading:false});
     }
 
     speechHandler = () => {
       this.initializeSpeechRecognizer();                  
     }
     render() {
-      if (this.state.loading) {
-        Alert.alert('Loading...');
-      }
         return (
             <HomeComponent
                 speechHandler ={this.speechHandler}/>
         )
     }
 }
+
+mapStateToProps = state => {
+  return {
+    auth: state.auth,
+    waiter_id: state.waiter_id
+  };
+};
+
+
+export default connect(mapStateToProps)(withRouter(HomeContainer));

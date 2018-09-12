@@ -1,9 +1,14 @@
 import React, {Component}from 'react';
-import LoginComponent from '../components/LoginComponent';
-import {Alert} from 'react-native';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-native'
-import * as url from '../constants/urls';
 import axios from '../axios';
+
+import {Alert} from 'react-native';
+
+import LoginComponent from '../components/LoginComponent';
+import * as  actions from '../store/actions';
+import * as url from '../constants/urls';
+import * as routes from '../constants/routes';
 
 class LoginContainer extends Component {
   constructor(props){
@@ -11,13 +16,13 @@ class LoginContainer extends Component {
     this.state = {
       waiter_id: "",
       password: "",
-      valid: false,
     }
   }
   handleLogin = () => {
     const {waiter_id, password} = this.state;
+    const post_data = {waiter_id: waiter_id};
 
-    axios.post(url.LOGIN, {waiter_id: waiter_id})
+    axios.post(url.LOGIN, post_data)
       .then(response => {
         this.validateWaiter(response.data)
       })
@@ -25,31 +30,13 @@ class LoginContainer extends Component {
           Alert.alert('There seems to be a problem! \n' +
           'Make sure you are connected to the server and that the server is running.');
         });
-
-    // fetch(MAIN_URL + LOGIN, 
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Accept': 'applications/json',
-    //       'Content-type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       waiter_id: waiter_id
-    //     })
-    //   }).then((response)=> response.json())
-    //           .then((responseJson)=>{
-    //             this.validateWaiter(responseJson);
-    //           }).catch((error) => {
-    //             Alert.alert('There seems to be a problem! \n' +
-    //             'Make sure you are connected to the server and that the server is running.');
-    //           });
-
   }
   validateWaiter = (result_json) => {
     if (result_json.result>0){
-      const {password} = this.state;
+      const {password, waiter_id} = this.state;
       if (password === result_json.password){
-        this.props.history.push('/');
+        this.props.onLogin(waiter_id);
+        this.props.history.push('routes.HOME');
       }
       else {
         Alert.alert('Your password is incorrect!');
@@ -70,6 +57,19 @@ class LoginContainer extends Component {
     );
   }
 }
-export default withRouter(LoginContainer);
+
+mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
+
+mapDispatchToProps = dispatch => {
+  return {
+    onLogin: (waiter_id) => dispatch(actions.authorizeUser(waiter_id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginContainer));
 
 

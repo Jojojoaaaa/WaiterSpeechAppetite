@@ -8,7 +8,7 @@ export default function HomeComponent(props) {
             <Text>Tap the button to create order</Text>
             <Button
                 title="Start"
-                onPress={() => speechHandler}/>
+                onPress={() => speechHandler()}/>
         </View>
     )
 }
