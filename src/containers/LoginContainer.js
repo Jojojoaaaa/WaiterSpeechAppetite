@@ -9,6 +9,7 @@ import LoginComponent from '../components/LoginComponent';
 import * as  actions from '../store/actions';
 import * as url from '../constants/urls';
 import * as routes from '../constants/routes';
+import * as dialog from '../constants/user_dialogs';
 
 class LoginContainer extends Component {
   constructor(props){
@@ -18,32 +19,34 @@ class LoginContainer extends Component {
       password: "",
     }
   }
+
   handleLogin = () => {
-    const {waiter_id, password} = this.state;
+    const {waiter_id} = this.state;
     const post_data = {waiter_id: waiter_id};
 
     axios.post(url.LOGIN, post_data)
       .then(response => {
+        //console.log(JSON.stringify(response));
         this.validateWaiter(response.data)
-      })
-        .catch(error => {
-          Alert.alert('There seems to be a problem! \n' +
-          'Make sure you are connected to the server and that the server is running.');
+      }).catch(error => {
+        //CATCH THIS MOFO ERROR
+          Alert.alert(dialog.SERVER_ERROR);
         });
   }
+
   validateWaiter = (result_json) => {
     if (result_json.result>0){
       const {password, waiter_id} = this.state;
       if (password === result_json.password){
         this.props.onLogin(waiter_id);
-        this.props.history.push('routes.HOME');
+        this.props.history.push(routes.HOME);
       }
       else {
-        Alert.alert('Your password is incorrect!');
+        Alert.alert(dialog.INCORRECT_PASSWORD);
       }
     }
     else {
-      Alert.alert('Waiter ID does not exist! Please try again!');
+      Alert.alert(dialog.NO_WAITER_ID);
     }
   }
   handleChange = (name, value) => {

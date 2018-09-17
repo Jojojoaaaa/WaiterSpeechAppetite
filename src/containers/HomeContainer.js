@@ -12,7 +12,7 @@ import {View, Alert, Text} from 'react-native';
 import HomeComponent from '../components/HomeComponent';
 import * as  commands from '../constants/speech_commands';
 import * as  routes from '../constants/routes';
-
+import * as  dialog from '../constants/user_dialogs';
 
 
 class HomeContainer extends Component {
@@ -23,14 +23,15 @@ class HomeContainer extends Component {
         this.props.history.push(routes.LOGIN);
       }
     }
+
     initializeSpeechRecognizer = () => {
       const speech_recognizer = options => new Promise(async (resolve, reject) => {
         //check if available
         const available = await SpeechRecognizer.isRecognitionAvailable();
         if (!available) {
-          reject("Speech recognizer is not available");
+          reject(dialog.SR_UNAVAILABLE);
         }
-        //sets up the processing of recognized words
+        //sets up the processes of recognizer
         const speech_listener = await SpeechRecognizer.createSpeechRecognizer();
         speech_listener.setRecognitionListener({
           onError: event => reject(event.error),
@@ -40,6 +41,7 @@ class HomeContainer extends Component {
             resolve(speech_results);
           }
         });
+
         speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});          
       });
       //defines what to do with results
@@ -47,31 +49,8 @@ class HomeContainer extends Component {
         this.verifySpeech(speech_results);
       }).catch(error => {
         console.log(error);
-        Alert.alert('Something went wrong...\n'+ this.findError(error));     
+        Alert.alert(dialog.SR_FAILED + this.findError(error));     
       });
-    }
-    //transfer to constants
-    findError = (error_code) => {
-      switch (error_code) {
-        case 1:
-          return 'Network operation timeout!'
-        case 2:
-          return 'Error on network!';
-        case 3:
-          return 'Error recording audio!';
-        case 4: 
-          return 'Server error!';
-        case 5:
-          return 'Client side error!';
-        case 6: 
-          return 'No speech input';
-        case 7: 
-          return 'No match found!';
-        case 9:
-          return 'Insufficient permissions!';
-        default:
-          return error_code;  
-      }
     }
 
     verifySpeech = (speech_results) => {
@@ -81,12 +60,38 @@ class HomeContainer extends Component {
           this.props.history.push(routes.ORDER_ACTIVITY);
         }
       else {
-        Alert.alert('Please try again...');
+        Alert.alert(dialog.SPEECH_COMMAND_404);
       }
     }
 
+    //transfer to constants
+    findError = (error_code) => {
+      switch (error_code) {
+        case 1:
+         return dialog.NETWORK_TIME_OUT;
+        case 2:
+          return dialog.NETWORK_ERROR;
+        case 3:
+          return dialog.RECORD_AUDIO_ERROR
+        case 4: 
+          return dialog.SR_SERVER_ERROR;
+        case 5:
+          return dialog.CLIENT_ERROR;
+        case 6: 
+          return dialog.NO_SPEECH_INPUT;
+        case 7: 
+          return dialog.NO_MATCH_FOUND;
+        case 8: 
+          return dialog.SR_BUSY;          
+        case 9:
+          return dialog.INSUFFICIENT_PERMISSIONS;
+        default:
+          return error_code;  
+      }
+    }
+   
     speechHandler = () => {
-      this.initializeSpeechRecognizer();                  
+      this.initializeSpeechRecognizer();             
     }
     render() {
         return (
