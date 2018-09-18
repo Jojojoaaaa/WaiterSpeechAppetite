@@ -1,5 +1,5 @@
 const initialState = {
-    auth: false,
+    auth: true,
     waiter_id: ''
 }
 

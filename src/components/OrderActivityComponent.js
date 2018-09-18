@@ -1,11 +1,46 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+import {
+        View, 
+        Image, 
+        Text, 
+        Button,
+        TouchableNativeFeedback,
+        TouchableOpacity} from 'react-native';
 
-export default function OrderActivityComponent(props) {
+export function OrderEntry(props) {
+    const {
+        order_item, 
+        order_cat_icon, 
+        order_price, 
+        order_subtotal, 
+        order_qty } = props;
+    <View>
+        <Text>{order_item}</Text>
+        <Text>{order_price}</Text>
+        <Text>{order_subtotal}</Text>
+        <Text>{order_qty}</Text>
+    </View>
+}
+
+export function OrderActivityComponent(props) {
+    const {
+        table_num, 
+        total,
+        startSpeechListener,
+        stopSpeechListener} = props;
+
     return (
         <View style = {{paddingTop: 100}}> 
+            <Text>TABLE NUMBER: {table_num}</Text>
+            <Text>TOTAL: Php {total}</Text>
             <Button
-             title="Start"/>
+             title="Image ni, hehe"
+             onPress={() => startSpeechListener()}/>
+            {props.children}
         </View>
     )
 }
+//button add minus
+//text orderdesc, qty, total, table number
+//button mic 
+//nav home, log out, pending orders

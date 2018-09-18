@@ -17,88 +17,86 @@ import * as  dialog from '../constants/user_dialogs';
 
 class HomeContainer extends Component {
 
-    componentWillMount () {
-      console.log(this.props);
-      if (!this.props.auth) {
-        this.props.history.push(routes.LOGIN);
-      }
+  constructor(props){
+    super(props);
+    this.state = {
+      speech_listener: ''
     }
+  }
 
-    initializeSpeechRecognizer = () => {
-      const speech_recognizer = options => new Promise(async (resolve, reject) => {
-        //check if available
-        const available = await SpeechRecognizer.isRecognitionAvailable();
-        if (!available) {
-          reject(dialog.SR_UNAVAILABLE);
-        }
-        //sets up the processes of recognizer
-        const speech_listener = await SpeechRecognizer.createSpeechRecognizer();
-        speech_listener.setRecognitionListener({
-          onError: event => reject(event.error),
-          onResults: event => {
-            var speech_results = event.results[SpeechRecognizer.RESULTS_RECOGNITION];
-            speech_results = speech_results.map(speech => speech.toUpperCase());
-            resolve(speech_results);
-          }
+  componentWillMount () {
+    console.log(this.props);
+    if (!this.props.auth) {
+      this.props.history.push(routes.LOGIN);
+    }
+    this.initializeSpeechRecognizer();
+  }
+  initializeSpeechRecognizer = () => {
+    SpeechRecognizer.createSpeechRecognizer()
+        .then( speech_listener => {
+            speech_listener.setRecognitionListener({
+                onError: event => {
+                    Alert.alert(dialog.SR_FAILED + this.findError(event.error));
+                },
+                onResults: event => {
+                    var speech_results = event.results[SpeechRecognizer.RESULTS_RECOGNITION];
+                    this.verifySpeech(speech_results);
+                  }
+            });
+            this.setState({speech_listener: speech_listener});
         });
-
-        speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});          
-      });
-      //defines what to do with results
-      speech_recognizer().then(speech_results => {
-        this.verifySpeech(speech_results);
-      }).catch(error => {
-        console.log(error);
-        Alert.alert(dialog.SR_FAILED + this.findError(error));     
-      });
-    }
-
-    verifySpeech = (speech_results) => {
-      console.log(speech_results);
-      if (speech_results.includes(commands.CREATE_ORDER)) 
-        {
-          this.props.history.push(routes.ORDER_ACTIVITY);
-        }
-      else {
-        Alert.alert(dialog.SPEECH_COMMAND_404);
+  }
+  verifySpeech = (speech_results) => {
+    console.log(speech_results);
+    const success = speech_results.some(speech => {
+      const _break = true;
+      if (commands.CREATE_ORDER.test(speech)) {
+        return _break;
       }
+    });
+    if (success) {
+      this.props.history.push(routes.ORDER_ACTIVITY);
     }
+    else {
+      Alert.alert(dialog.SPEECH_COMMAND_404);
+    }
+  }
 
-    //transfer to constants
-    findError = (error_code) => {
-      switch (error_code) {
-        case 1:
-         return dialog.NETWORK_TIME_OUT;
-        case 2:
-          return dialog.NETWORK_ERROR;
-        case 3:
-          return dialog.RECORD_AUDIO_ERROR
-        case 4: 
-          return dialog.SR_SERVER_ERROR;
-        case 5:
-          return dialog.CLIENT_ERROR;
-        case 6: 
-          return dialog.NO_SPEECH_INPUT;
-        case 7: 
-          return dialog.NO_MATCH_FOUND;
-        case 8: 
-          return dialog.SR_BUSY;          
-        case 9:
-          return dialog.INSUFFICIENT_PERMISSIONS;
-        default:
-          return error_code;  
-      }
+  findError = (error_code) => {
+    switch (error_code) {
+      case 1:
+        return dialog.NETWORK_TIME_OUT;
+      case 2:
+        return dialog.NETWORK_ERROR;
+      case 3:
+        return dialog.RECORD_AUDIO_ERROR
+      case 4: 
+        return dialog.SR_SERVER_ERROR;
+      case 5:
+        return dialog.CLIENT_ERROR;
+      case 6: 
+        return dialog.NO_SPEECH_INPUT;
+      case 7: 
+        return dialog.NO_MATCH_FOUND;
+      case 8: 
+        return dialog.SR_BUSY;          
+      case 9:
+        return dialog.INSUFFICIENT_PERMISSIONS;
+      default:
+        return error_code;  
     }
+  }
    
-    speechHandler = () => {
-      this.initializeSpeechRecognizer();             
-    }
-    render() {
-        return (
-            <HomeComponent
-                speechHandler ={this.speechHandler}/>
-        )
-    }
+  speechHandler = () => {
+    const {speech_listener} = this.state;
+    speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
+  }
+  render() {
+      return (
+          <HomeComponent
+              speechHandler ={this.speechHandler}/>
+      )
+  }
 }
 
 mapStateToProps = state => {
