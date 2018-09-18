@@ -1,10 +1,9 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
+.*
+!/.gitignore
 
 # expo
 .expo/
-
-# dependencies
-/node_modules
 
 # misc
 .env.local
@@ -13,8 +12,6 @@
 .env.production.local
 
 npm-debug.log*
-
-
 
 # OSX
 .DS_Store
@@ -29,6 +26,9 @@ npm-debug.log*
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
+
+#cache
+.taskArtifacts
 
 # Xcode
 build/
@@ -56,11 +56,9 @@ local.properties
 
 # node.js
 node_modules/
-npm-debug.log
 
 # BUCK
 buck-out/
-\.buckd/
+/.buckd/
 android/app/libs
 android/keystores/debug.keystore
-

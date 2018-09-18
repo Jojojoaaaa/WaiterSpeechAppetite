@@ -4,29 +4,34 @@ import {
     RecognizerIntent,
     RecognitionListener
   } from 'react-native-android-speech-recognizer';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-native'
+
 import {View, Alert, Text} from 'react-native';
+
 import HomeComponent from '../components/HomeComponent';
 import * as  commands from '../constants/speech_commands';
+import * as  routes from '../constants/routes';
+import * as  dialog from '../constants/user_dialogs';
 
 
-export default class HomeContainer extends Component {
-    constructor(props) {
-        super(props)
-        this.state ={
-          loading: false
-        }
-      
+class HomeContainer extends Component {
+
+    componentWillMount () {
+      console.log(this.props);
+      if (!this.props.auth) {
+        this.props.history.push(routes.LOGIN);
+      }
     }
-    componentDidMount () {
-    }
+
     initializeSpeechRecognizer = () => {
       const speech_recognizer = options => new Promise(async (resolve, reject) => {
         //check if available
         const available = await SpeechRecognizer.isRecognitionAvailable();
         if (!available) {
-          reject("Speech recognizer is available");
+          reject(dialog.SR_UNAVAILABLE);
         }
-        //sets up the processing of recognized words
+        //sets up the processes of recognizer
         const speech_listener = await SpeechRecognizer.createSpeechRecognizer();
         speech_listener.setRecognitionListener({
           onError: event => reject(event.error),
@@ -36,66 +41,72 @@ export default class HomeContainer extends Component {
             resolve(speech_results);
           }
         });
+
         speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});          
       });
       //defines what to do with results
       speech_recognizer().then(speech_results => {
-        this.setState({loading: true});
         this.verifySpeech(speech_results);
       }).catch(error => {
         console.log(error);
-        Alert.alert('Something went wrong...\n'+ this.findError(error));     
-        this.setState({loading: false}); 
+        Alert.alert(dialog.SR_FAILED + this.findError(error));     
       });
-    }
-
-    findError = (error_code) => {
-      switch (error_code) {
-        case 1:
-          return 'Network operation timeout!'
-        case 2:
-          return 'Error on network!';
-        case 3:
-          return 'Error recording audio!';
-        case 4: 
-          return 'Server error!';
-        case 5:
-          return 'Client side error!';
-        case 6: 
-          return 'No speech input';
-        case 7: 
-          return 'No match found!';
-        case 9:
-          return 'Insufficient permissions!';
-        default:
-          return error_code;  
-      }
     }
 
     verifySpeech = (speech_results) => {
       console.log(speech_results);
-      if (speech_results.includes('CREATE ORDER')) 
+      if (speech_results.includes(commands.CREATE_ORDER)) 
         {
-          Alert.alert('You can now create order');
+          this.props.history.push(routes.ORDER_ACTIVITY);
         }
       else {
-        Alert.alert('Please try again...');
+        Alert.alert(dialog.SPEECH_COMMAND_404);
       }
-      this.setState({loading:false});
     }
 
+    //transfer to constants
+    findError = (error_code) => {
+      switch (error_code) {
+        case 1:
+         return dialog.NETWORK_TIME_OUT;
+        case 2:
+          return dialog.NETWORK_ERROR;
+        case 3:
+          return dialog.RECORD_AUDIO_ERROR
+        case 4: 
+          return dialog.SR_SERVER_ERROR;
+        case 5:
+          return dialog.CLIENT_ERROR;
+        case 6: 
+          return dialog.NO_SPEECH_INPUT;
+        case 7: 
+          return dialog.NO_MATCH_FOUND;
+        case 8: 
+          return dialog.SR_BUSY;          
+        case 9:
+          return dialog.INSUFFICIENT_PERMISSIONS;
+        default:
+          return error_code;  
+      }
+    }
+   
     speechHandler = () => {
-      this.initializeSpeechRecognizer();                  
+      this.initializeSpeechRecognizer();             
     }
     render() {
-      if (this.state.loading) {
-        Alert.alert('Loading...');
-      }
         return (
-      
             <HomeComponent
                 speechHandler ={this.speechHandler}/>
-      
         )
     }
 }
+
+mapStateToProps = state => {
+  return {
+    auth: state.auth,
+    waiter_id: state.waiter_id
+  };
+};
+
+
+export default connect(mapStateToProps)(withRouter(HomeContainer));

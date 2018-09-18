@@ -1,9 +1,23 @@
+//libraries
 import React, {Component}from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { NativeRouter, Route, Redirect, Switch } from 'react-router-native';
+
+//react components
+import { View } from 'react-native';
+
+//components
 import Login from './src/pages/Login';
 import Home from './src/pages/Home'
-import { NativeRouter, Route, Link, Redirect, Switch } from 'react-router-native'
-import { Alert, View } from 'react-native';
-//hfghggh
+import OrderActivity from './src/pages/OrderActivity'
+import * as routes from './src/constants/routes';
+
+//store
+import rootReducer from './src/store/reducer';
+
+const store = createStore(rootReducer);
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -11,15 +25,15 @@ export default class App extends Component {
   render() {
 
     return (
-      <NativeRouter>
-        <View>
-          <Switch>
-            <Route exact path="/" render={()=> <Redirect to="/login"/>}/>
-            <Route exact path="/login" component = {Login}/>
-            <Route exact path="/:waiterID" component ={Home}/>
-          </Switch>
-        </View>
-      </NativeRouter>  
+      <Provider store = {store}>
+        <NativeRouter>
+          <View>
+              <Route exact path={routes.HOME} component ={Home}/>
+              <Route exact path={routes.LOGIN} component = {Login}/>
+              <Route exact path={routes.ORDER_ACTIVITY} component = {OrderActivity}/>
+          </View>
+        </NativeRouter>
+      </Provider>  
     );
   }
 }
