@@ -16,7 +16,6 @@ export default function LoginComponent(props) {
                 placeholder ="Waiter ID"        
                 onChangeText ={(text) => handleChange('waiter_id', text)}
                 />
-
             <TextInput
                 style={{height: 40, borderColor: 'orange', borderWidth:1}}
                 placeholder ="Password"
@@ -32,4 +31,3 @@ export default function LoginComponent(props) {
         </View>
     );
 }
-//Mae, transfer styles to your styles, whatevs
