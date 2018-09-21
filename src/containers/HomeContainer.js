@@ -29,7 +29,9 @@ class HomeContainer extends Component {
     if (!this.props.auth) {
       this.props.history.push(routes.LOGIN);
     }
-    this.initializeSpeechRecognizer();
+    else {
+     this.initializeSpeechRecognizer();
+    }
   }
   initializeSpeechRecognizer = () => {
     SpeechRecognizer.createSpeechRecognizer()

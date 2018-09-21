@@ -6,22 +6,29 @@ import {
   } from 'react-native-android-speech-recognizer';
 
 import { withRouter } from 'react-router-native'
+import axios from '../axios';
+
 import {View, Alert, Text} from 'react-native';
 
-import {OrderActivityComponent} from '../components/OrderActivityComponent';
+import {OrderActivityComponent , OrderEntry} from '../components/OrderActivityComponent';
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
+import * as url from '../constants/urls';
 
 class OrderActivityContainer extends Component {
     constructor(props){
         super(props);
         this.state = {
           speech_listener: '',
-          listening: false
+          orders: [],
+          menu: [],
         }
       }
     componentWillMount() {
         this.initializeSpeechRecognizer();
+        this.getAllMenu();
+    }
+    componentDidMount() {
     }
     initializeSpeechRecognizer = () => {
         SpeechRecognizer.createSpeechRecognizer()
@@ -40,40 +47,82 @@ class OrderActivityContainer extends Component {
                 this.setState({speech_listener: speech_listener});
             });
     }
+
     processSpeechResults = (speech_results) => {
       const _break = true;
+
       speech_results.some(speech => {
         if (commands.ADD_ENTRY.test(speech)) {
-          console.log(speech);
-          const order_matches = speech_results.filter(match => commands.ADD_ENTRY.test(match));
-          const last_index = order_matches.length -1;
-          
-					order_matches.some((match, i) => {
-						match = match.split(' ');
-						const qty = match[1];
-            const order = match.splice(2).join(' ');
-            console.log("Order: " + order + " Qty: " + qty);
-            return _break;
-            //db check
-					});
+          this.processOrderEntry(speech_results);
           return _break;
         }
       })
     }
-    startSpeechListener = () => {
-        const {speech_listener} = this.state;
-        speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
-        // this.setState({
-        //   listening: true
-        // })
+    processOrderEntry = (speech_results) => {
+      const _break = true;
+      const { menu } = this.state;
+      console.log(menu);
+
+      const order_matches = speech_results.filter(match => commands.ADD_ENTRY.test(match));
+      const last_index = order_matches.length -1;
+
+      order_matches.some((match, i) => {
+        console.log(match);
+        match = match.split(' ');
+        
+        const qty = parseInt(match[1], 10);
+        const order = match.splice(2).join(' ');
+
+        if (menu.includes(order.toUpperCase())) {
+          this.retrieveOrderDetail(order).then(res => {
+            if (qty <= res.servings){
+              const order_detail = {
+                order_name: order,
+                order_price: res.price,
+                order_subtotal: res.price * qty,
+                order_qty: qty
+              }
+              let orders = [...this.state.orders];
+              orders.push(order_detail);
+              this.setState({orders: orders});
+              console.log('order is processed');
+            }
+            else {
+              console.log('not enough');
+            }
+          })
+           return _break;
+        }
+        else {
+          if (last_index === i) {
+            console.log("menu does not exist");
+          }
+        }
+      });
     }
-    // stopSpeechListener = () => {
-    //   // const {speech_listener} = this.state;
-    //   // speech_listener.stopListening();
-    //     this.setState({
-    //       listening: false
-    //     })
-    //}
+    retrieveOrderDetail = (order) => {
+      order = order.toUpperCase();
+      const post_data = {order_name: order};
+      return (
+         axios.post(url.RETRIEVE_ORDER_DETAIL, post_data)
+          .then(response => {
+            return response.data;
+          })
+        );
+    }
+
+    getAllMenu = () => {
+        axios.get(url.GET_ALL_MENU)
+        .then(response => {
+          const menu = response.data.map(m => m.Name);
+          this.setState({menu: menu});
+        });
+    }
+
+    startSpeechListener = () => {
+      const {speech_listener} = this.state;
+      speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
+    }
     findError = (error_code) => {
         switch (error_code) {
           case 1:
@@ -99,15 +148,33 @@ class OrderActivityContainer extends Component {
         }
       }
     render () {
-        //get state
-        const startSpeechListener = this.startSpeechListener;
-        const stopSpeechListener = this.stopSpeechListener;
+      const {
+        orders
+      } = this.state;
 
-        return (
-            <OrderActivityComponent
-                startSpeechListener = {startSpeechListener}
-                stopSpeechListener = {stopSpeechListener}/>
-        )
+      const startSpeechListener = this.startSpeechListener;
+      const stopSpeechListener = this.stopSpeechListener;
+      let order_list_display = (
+        orders.map(order => {
+          return (
+            <OrderEntry
+            order_name = {order.order_name}
+            order_price = {order.order_price}
+            order_subtotal = {order.order_subtotal}
+            order_qty = {order.order_qty}
+            />
+          );
+        })
+      )
+      return (
+        <View>
+          <OrderActivityComponent
+            startSpeechListener = {startSpeechListener}
+            stopSpeechListener = {stopSpeechListener}>
+            {order_list_display}
+          </OrderActivityComponent>
+        </View>    
+      )
     }
 }
 

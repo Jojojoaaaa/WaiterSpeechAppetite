@@ -2,7 +2,7 @@
 import React, {Component}from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { NativeRouter, Route, Redirect, Switch } from 'react-router-native';
+import { NativeRouter, Route } from 'react-router-native';
 
 //react components
 import { View } from 'react-native';

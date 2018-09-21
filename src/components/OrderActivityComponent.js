@@ -9,17 +9,19 @@ import {
 
 export function OrderEntry(props) {
     const {
-        order_item, 
+        order_name, 
         order_cat_icon, 
         order_price, 
         order_subtotal, 
         order_qty } = props;
-    <View>
-        <Text>{order_item}</Text>
-        <Text>{order_price}</Text>
-        <Text>{order_subtotal}</Text>
-        <Text>{order_qty}</Text>
-    </View>
+    return (
+        <View>
+            <Text>{order_name}</Text>
+            <Text>{order_price}</Text>
+            <Text>{order_subtotal}</Text>
+            <Text>{order_qty}</Text>
+        </View>
+    )
 }
 
 export function OrderActivityComponent(props) {

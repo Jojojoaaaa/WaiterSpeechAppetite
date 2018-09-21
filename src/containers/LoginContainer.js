@@ -21,15 +21,17 @@ class LoginContainer extends Component {
   }
 
   handleLogin = () => {
-    const {waiter_id} = this.state;
-    const post_data = {waiter_id: waiter_id};
+    let {waiter_id} = this.state;
+    waiter_id = waiter_id.trim();
+    const post_data = {waiter_id:waiter_id};
 
     axios.post(url.LOGIN, post_data)
       .then(response => {
-        //console.log(JSON.stringify(response));
         this.validateWaiter(response.data)
-      }).catch(error => {
+      })
+      .catch(error => {
         //CATCH THIS MOFO ERROR
+          console.log(error.response);
           Alert.alert(dialog.SERVER_ERROR);
         });
   }

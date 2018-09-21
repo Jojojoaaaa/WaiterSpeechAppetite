@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-native'
 import {TextInput, Text , View, Button} from 'react-native';
 
 export default function LoginComponent(props) {
@@ -20,12 +19,10 @@ export default function LoginComponent(props) {
                 secureTextEntry ={true}
                 onChangeText ={(text) => handleChange('password', text)}                
                 />
-            <Link to = "/">
                 <Button 
                     onPress = {() => handleLogin()}
                     title="Login"  
                     color = 'red'/>
-            </Link>
         </View>
     );
 }
