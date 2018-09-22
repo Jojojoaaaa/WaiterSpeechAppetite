@@ -5,6 +5,7 @@ import {
     RecognitionListener
   } from 'react-native-android-speech-recognizer';
 
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-native'
 import axios from '../axios';
 
@@ -21,7 +22,9 @@ class OrderActivityContainer extends Component {
         super(props);
         this.state = {
           speech_listener: '',
+          table_number: '',
           orders: [],
+          total: 0,
           menu: [],
         }
       }
@@ -53,7 +56,15 @@ class OrderActivityContainer extends Component {
       const _break = true;
 
       const command_recognized = speech_results.some(speech => {
-        if (commands.ADD_ENTRY.test(speech)) {
+        if (commands.SET_TABLE_NUMBER.test(speech)){
+          this.setTableNumber(speech);
+          return _break;
+        }
+        else if (commands.CONFIRM_ORDER.test(speech)){
+          this.confirmOrder();
+          return _break; 
+        }
+        else if (commands.ADD_ENTRY.test(speech)) {
           this.processOrderEntry(speech_results);
           return _break;
         }
@@ -98,27 +109,52 @@ class OrderActivityContainer extends Component {
                 console.log(orders);
                 orders.push(order_detail);
                 this.setState({orders: orders});
-                console.log('order is processed');
+                this.setTotal();
               }
               else {
-                console.log('not enough');
+                Alert.alert(dialog.NOT_ENOUGH_SERVINGS);
               }
             })
             return _break;
           }
           else {
             if (last_index === i) {
-              console.log("menu does not exist");
+              Alert.alert(dialog.ORDER_DOES_NOT_EXIST);
             }
           }
         }
         else {
-          console.log('you already ordered that');
+          Alert.alert(dialog.ORDER_DUPLICATE);
           return _break;
         }
       });
     }
-
+    setTableNumber = (speech) => {
+      speech = speech.split(' ');
+      const table_number = parseInt(speech[2], 10);
+      this.setState({table_number: table_number});
+    }
+    setTotal = () => {
+      const {orders} = this.state;
+      let total = 0;
+      orders.forEach(order => {
+        total += order.order_subtotal;
+      })
+      this.setState({total: total});
+    }
+    confirmOrder = () => {
+      const {table_number, orders} = this.state;
+      if (table_number === '') {
+        Alert.alert(dialog.NO_TABLE_NUMBER);
+      }
+      else if (orders.length === 0) {
+        Alert.alert(dialog.NO_ORDER_ENTRY)
+      }
+      else {
+        Alert.alert('ORDER CONFIRMED');
+        //CODES HERE;
+      }
+    }
     modifyOrderEntry = (method_name, order) => {
       let orders = [...this.state.orders];
       let order_idx = orders.findIndex(o => order === o.order_name );
@@ -136,6 +172,7 @@ class OrderActivityContainer extends Component {
       order_entry.order_subtotal = qty * order_entry.order_price;
       orders[order_idx] = order_entry;
       this.setState({orders: orders});
+      this.setTotal();
     }
    
     retrieveOrderDetail = (order) => {
@@ -187,7 +224,9 @@ class OrderActivityContainer extends Component {
       }
     render () {
       const {
-        orders
+        orders,
+        table_number,
+        total
       } = this.state;
 
       const startSpeechListener = this.startSpeechListener;
@@ -211,6 +250,8 @@ class OrderActivityContainer extends Component {
       return (
         <View>
           <OrderActivityComponent
+            table_number = {table_number}
+            total = {total}
             startSpeechListener = {startSpeechListener}
             stopSpeechListener = {stopSpeechListener}>
             {order_list_display}
@@ -219,5 +260,11 @@ class OrderActivityContainer extends Component {
       )
     }
 }
+mapStateToProps = state => {
+  return {
+    auth: state.auth,
+    waiter_id: state.waiter_id
+  };
+};
 
-export default withRouter(OrderActivityContainer);
+export default connect(mapStateToProps)(withRouter(OrderActivityContainer));

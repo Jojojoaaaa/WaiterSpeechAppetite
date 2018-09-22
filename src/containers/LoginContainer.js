@@ -24,18 +24,31 @@ class LoginContainer extends Component {
     let {waiter_id} = this.state;
     waiter_id = waiter_id.trim();
     const post_data = {waiter_id:waiter_id};
-
-    axios.post(url.LOGIN, post_data)
+    this.processLogin()
+      .then(res => {
+        this.validateWaiter(res)
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert(dialog.SERVER_ERROR);
+      })
+    
+  }
+  processLogin = (post_data) => {
+    return (
+      axios.post(url.LOGIN, post_data)
       .then(response => {
-        this.validateWaiter(response.data)
+        return response.data;
+        //this.validateWaiter(response.data)
       })
       .catch(error => {
         //CATCH THIS MOFO ERROR
-          console.log(error.response);
-          Alert.alert(dialog.SERVER_ERROR);
-        });
+          return error.response;
+          //console.log(error.response);
+          //Alert.alert(dialog.SERVER_ERROR);
+        })
+    )
   }
-
   validateWaiter = (result_json) => {
     if (result_json.result>0){
       const {password, waiter_id} = this.state;

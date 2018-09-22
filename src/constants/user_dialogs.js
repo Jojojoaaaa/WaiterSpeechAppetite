@@ -18,3 +18,10 @@ export const NO_WAITER_ID = 'Waiter ID does not exist! Please try again!';
 export const SR_UNAVAILABLE = 'Speech recognizer is not available';
 export const SR_FAILED = 'Ooops! Something went wrong...\n';
 export const SPEECH_COMMAND_404 = 'Cannot recognize speech command \nPlease try again...';
+
+//order entry feedback
+export const NOT_ENOUGH_SERVINGS = 'Sorry, the order you requested does not have enough servings.';
+export const ORDER_DOES_NOT_EXIST = 'Order does not exist.';
+export const NO_ORDER_ENTRY = "You haven't placed an order yet.";
+export const NO_TABLE_NUMBER = "You haven't set the table number yet.";
+export const ORDER_DUPLICATE = 'You already ordered that.';

@@ -35,14 +35,14 @@ export function OrderEntry(props) {
 
 export function OrderActivityComponent(props) {
     const {
-        table_num, 
+        table_number, 
         total,
         startSpeechListener,
         stopSpeechListener} = props;
 
     return (
         <View style = {{paddingTop: 100}}> 
-            <Text>TABLE NUMBER: {table_num}</Text>
+            <Text>TABLE NUMBER: {table_number}</Text>
             <Text>TOTAL: Php {total}</Text>
             <Button
              title="Image ni, hehe"
