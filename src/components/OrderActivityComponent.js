@@ -1,4 +1,6 @@
 import React from 'react';
+import * as method from '../constants/method';
+
 import {
         View, 
         Image, 
@@ -13,13 +15,20 @@ export function OrderEntry(props) {
         order_cat_icon, 
         order_price, 
         order_subtotal, 
-        order_qty } = props;
+        order_qty,
+        modifyOrderEntry } = props;
     return (
-        <View>
+        <View  style={{borderColor: 'orange', borderWidth:5}}>
             <Text>{order_name}</Text>
-            <Text>{order_price}</Text>
-            <Text>{order_subtotal}</Text>
+            <Text>{order_price} Php</Text>
+            <Text>{order_subtotal} Php</Text>
             <Text>{order_qty}</Text>
+            <Button
+                title="+"
+                onPress={() => modifyOrderEntry(method.ADD_QTY, order_name)} />
+            <Button
+                title="-"
+                onPress={() => modifyOrderEntry(method.SUB_QTY, order_name)} />
         </View>
     )
 }

@@ -17,4 +17,4 @@ export const NO_WAITER_ID = 'Waiter ID does not exist! Please try again!';
 
 export const SR_UNAVAILABLE = 'Speech recognizer is not available';
 export const SR_FAILED = 'Ooops! Something went wrong...\n';
-export const SPEECH_COMMAND_404 = 'Please try again...';
+export const SPEECH_COMMAND_404 = 'Cannot recognize speech command \nPlease try again...';

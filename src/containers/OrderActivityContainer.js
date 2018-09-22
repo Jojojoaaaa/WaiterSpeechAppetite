@@ -14,6 +14,7 @@ import {OrderActivityComponent , OrderEntry} from '../components/OrderActivityCo
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
 import * as url from '../constants/urls';
+import * as method from '../constants/method';
 
 class OrderActivityContainer extends Component {
     constructor(props){
@@ -51,12 +52,16 @@ class OrderActivityContainer extends Component {
     processSpeechResults = (speech_results) => {
       const _break = true;
 
-      speech_results.some(speech => {
+      const command_recognized = speech_results.some(speech => {
         if (commands.ADD_ENTRY.test(speech)) {
           this.processOrderEntry(speech_results);
           return _break;
         }
       })
+
+      if (!command_recognized) {
+        Alert.alert(dialog.SPEECH_COMMAND_404);
+      }
     }
     processOrderEntry = (speech_results) => {
       const _break = true;
@@ -67,39 +72,72 @@ class OrderActivityContainer extends Component {
       const last_index = order_matches.length -1;
 
       order_matches.some((match, i) => {
+        let orders = [...this.state.orders];
+        let order_exists = false;
         console.log(match);
-        match = match.split(' ');
-        
+
+        match = match.split(' ');        
         const qty = parseInt(match[1], 10);
         const order = match.splice(2).join(' ');
 
-        if (menu.includes(order.toUpperCase())) {
-          this.retrieveOrderDetail(order).then(res => {
-            if (qty <= res.servings){
-              const order_detail = {
-                order_name: order,
-                order_price: res.price,
-                order_subtotal: res.price * qty,
-                order_qty: qty
+        const order_in_menu = menu.includes(order.toUpperCase());
+
+        if (orders.length > 0 ){
+          order_exists = order_exists = orders.some(o => o.order_name === order);
+        }
+        if (!order_exists) {
+          if (order_in_menu) {
+            this.retrieveOrderDetail(order).then(res => {
+              if (qty <= res.servings){
+                const order_detail = {
+                  order_name: order,
+                  order_price: res.price,
+                  order_subtotal: res.price * qty,
+                  order_qty: qty
+                }
+                console.log(orders);
+                orders.push(order_detail);
+                this.setState({orders: orders});
+                console.log('order is processed');
               }
-              let orders = [...this.state.orders];
-              orders.push(order_detail);
-              this.setState({orders: orders});
-              console.log('order is processed');
+              else {
+                console.log('not enough');
+              }
+            })
+            return _break;
+          }
+          else {
+            if (last_index === i) {
+              console.log("menu does not exist");
             }
-            else {
-              console.log('not enough');
-            }
-          })
-           return _break;
+          }
         }
         else {
-          if (last_index === i) {
-            console.log("menu does not exist");
-          }
+          console.log('you already ordered that');
+          return _break;
         }
       });
     }
+
+    modifyOrderEntry = (method_name, order) => {
+      let orders = [...this.state.orders];
+      let order_idx = orders.findIndex(o => order === o.order_name );
+      let order_entry = orders[order_idx];
+      let qty = order_entry.order_qty;
+
+  
+      if (method_name === method.ADD_QTY) {
+        qty += 1;
+      }
+      else if (qty > 1 && method_name === method.SUB_QTY) {
+        qty -= 1;
+      }
+      order_entry.order_qty = qty;
+      order_entry.order_subtotal = qty * order_entry.order_price;
+      orders[order_idx] = order_entry;
+      this.setState({orders: orders});
+    }
+   
     retrieveOrderDetail = (order) => {
       order = order.toUpperCase();
       const post_data = {order_name: order};
@@ -154,14 +192,18 @@ class OrderActivityContainer extends Component {
 
       const startSpeechListener = this.startSpeechListener;
       const stopSpeechListener = this.stopSpeechListener;
+      const modifyOrderEntry = this.modifyOrderEntry;
+
       let order_list_display = (
         orders.map(order => {
           return (
             <OrderEntry
+            key = {order.order_name + order.order_qty}
             order_name = {order.order_name}
             order_price = {order.order_price}
             order_subtotal = {order.order_subtotal}
             order_qty = {order.order_qty}
+            modifyOrderEntry = {modifyOrderEntry}
             />
           );
         })
