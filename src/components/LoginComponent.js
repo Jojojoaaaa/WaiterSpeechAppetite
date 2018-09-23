@@ -5,6 +5,7 @@ import {
     View,
     Image, 
     Button} from 'react-native';
+import img from '../assets/img.jpg';
 
 export default function LoginComponent(props) {
     const { handleLogin,
@@ -18,7 +19,7 @@ export default function LoginComponent(props) {
             alignItems: 'center',}}>
             <Image
             style = {{width: 200, height: 200, marginBottom: 100,  borderRadius: 150 }} 
-            source = {require('../assets/img.jpg')} />
+            source = {img} />
             <TextInput
                 style={{width: 200, height: 40, marginBottom: 15, borderColor: 'orange', borderWidth:1}}
                 placeholder ="Waiter ID"        

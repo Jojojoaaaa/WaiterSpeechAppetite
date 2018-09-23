@@ -6,6 +6,7 @@ import {
   } from 'react-native-android-speech-recognizer';
 
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { withRouter } from 'react-router-native'
 import axios from '../axios';
 
@@ -16,7 +17,10 @@ import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
 import * as url from '../constants/urls';
 import * as method from '../constants/method';
+import * as routes from '../constants/routes';
 
+
+//let moment = require()
 class OrderActivityContainer extends Component {
     constructor(props){
         super(props);
@@ -151,9 +155,53 @@ class OrderActivityContainer extends Component {
         Alert.alert(dialog.NO_ORDER_ENTRY)
       }
       else {
-        Alert.alert('ORDER CONFIRMED');
+        this.insertOrders()
+          .then(res => {
+            const order_id = res.order_id;
+            if (!(order_id < 0)){
+              this.insertOrderDetail(order_id);
+            }
+            else {
+              Alert.alert('Something went wrong');
+            }
+          })
+        //Alert.alert('ORDER CONFIRMED');
         //CODES HERE;
       }
+    }
+    insertOrders = () => {
+      let post_data = {
+        status : 'PENDING',
+        table_number : this.state.table_number,
+        timestamp : moment().format('LLL'),
+        total : this.state.total,
+        waiter_id: this.props.waiter_id
+      };
+      return (
+        axios.post(url.INSERT_ORDERS, post_data)
+        .then(response => response.data)
+        .catch(error => error.response)
+      );
+    
+    }
+    insertOrderDetail = (order_id) => {
+      const {orders} = this.state;
+      const order_details = orders.map(order => {
+        return {
+          order_name: order.order_name.toUpperCase(), 
+          qty : order.order_qty, 
+          order_id: order_id
+        }
+      });
+      const post_data = {orders : order_details};
+      axios.post(url.INSERT_ORDERS_DETAIL, post_data)
+        .then(response =>{
+          console.log(response);
+          Alert.alert('ORDER CONFIRMED');
+          this.props.history.push(routes.HOME);
+          //console.log(response);
+        })
+        .catch(error => console.log(error));
     }
     modifyOrderEntry = (method_name, order) => {
       let orders = [...this.state.orders];
@@ -180,9 +228,7 @@ class OrderActivityContainer extends Component {
       const post_data = {order_name: order};
       return (
          axios.post(url.RETRIEVE_ORDER_DETAIL, post_data)
-          .then(response => {
-            return response.data;
-          })
+          .then(response =>  response.data)
         );
     }
 
