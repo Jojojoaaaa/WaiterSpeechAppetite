@@ -24,8 +24,9 @@ class LoginContainer extends Component {
     let {waiter_id} = this.state;
     waiter_id = waiter_id.trim();
     const post_data = {waiter_id:waiter_id};
-    this.processLogin()
+    this.processLogin(post_data)
       .then(res => {
+        console.log(res);
         this.validateWaiter(res)
       })
       .catch(err => {
@@ -37,16 +38,8 @@ class LoginContainer extends Component {
   processLogin = (post_data) => {
     return (
       axios.post(url.LOGIN, post_data)
-      .then(response => {
-        return response.data;
-        //this.validateWaiter(response.data)
-      })
-      .catch(error => {
-        //CATCH THIS MOFO ERROR
-          return error.response;
-          //console.log(error.response);
-          //Alert.alert(dialog.SERVER_ERROR);
-        })
+      .then(response => response.data)
+      .catch(error => error.response)
     )
   }
   validateWaiter = (result_json) => {
