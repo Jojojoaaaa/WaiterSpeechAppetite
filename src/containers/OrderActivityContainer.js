@@ -23,21 +23,24 @@ import * as routes from '../constants/routes';
 //let moment = require()
 class OrderActivityContainer extends Component {
     constructor(props){
-        super(props);
-        this.state = {
-          speech_listener: '',
-          table_number: '',
-          orders: [],
-          total: 0,
-          menu: [],
-        }
+      super(props);
+      this.state = {
+        speech_listener: '',
+        table_number: '',
+        orders: [],
+        total: 0,
+        menu: [],
       }
+    }
+
     componentWillMount() {
         this.initializeSpeechRecognizer();
         this.getAllMenu();
     }
+
     componentDidMount() {
     }
+
     initializeSpeechRecognizer = () => {
         SpeechRecognizer.createSpeechRecognizer()
             .then( speech_listener => {
@@ -65,7 +68,16 @@ class OrderActivityContainer extends Component {
           return _break;
         }
         else if (commands.CONFIRM_ORDER.test(speech)){
-          this.confirmOrder();
+          Alert.alert(
+            'Confirm Order',
+            'Are you sure?',
+            [
+              {text: 'Confirm Order', onPress: () => this.confirmOrder()},
+              {text: 'Modify Order'},
+              //{text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+          )
           return _break; 
         }
         else if (commands.ADD_ENTRY.test(speech)) {
@@ -78,6 +90,7 @@ class OrderActivityContainer extends Component {
         Alert.alert(dialog.SPEECH_COMMAND_404);
       }
     }
+
     processOrderEntry = (speech_results) => {
       const _break = true;
       const { menu } = this.state;
@@ -108,7 +121,8 @@ class OrderActivityContainer extends Component {
                   order_name: order,
                   order_price: res.price,
                   order_subtotal: res.price * qty,
-                  order_qty: qty
+                  order_qty: qty,
+                  order_category: res.category
                 }
                 console.log(orders);
                 orders.push(order_detail);
@@ -133,11 +147,13 @@ class OrderActivityContainer extends Component {
         }
       });
     }
+
     setTableNumber = (speech) => {
       speech = speech.split(' ');
       const table_number = parseInt(speech[2], 10);
       this.setState({table_number: table_number});
     }
+
     setTotal = () => {
       const {orders} = this.state;
       let total = 0;
@@ -146,6 +162,7 @@ class OrderActivityContainer extends Component {
       })
       this.setState({total: total});
     }
+
     confirmOrder = () => {
       const {table_number, orders} = this.state;
       if (table_number === '') {
@@ -165,10 +182,9 @@ class OrderActivityContainer extends Component {
               Alert.alert('Something went wrong');
             }
           })
-        //Alert.alert('ORDER CONFIRMED');
-        //CODES HERE;
       }
     }
+
     insertOrders = () => {
       let post_data = {
         status : 'PENDING',
@@ -184,6 +200,7 @@ class OrderActivityContainer extends Component {
       );
     
     }
+
     insertOrderDetail = (order_id) => {
       const {orders} = this.state;
       const order_details = orders.map(order => {
@@ -203,12 +220,12 @@ class OrderActivityContainer extends Component {
         })
         .catch(error => console.log(error));
     }
+
     modifyOrderEntry = (method_name, order) => {
       let orders = [...this.state.orders];
-      let order_idx = orders.findIndex(o => order === o.order_name );
+      const order_idx = orders.findIndex(o => order === o.order_name );
       let order_entry = orders[order_idx];
       let qty = order_entry.order_qty;
-
   
       if (method_name === method.ADD_QTY) {
         qty += 1;
@@ -222,7 +239,16 @@ class OrderActivityContainer extends Component {
       this.setState({orders: orders});
       this.setTotal();
     }
-   
+    
+    deleteOrderEntry = (order) => {
+      let orders = [...this.state.orders];
+      const order_idx = orders.findIndex(o => order === o.order_name );
+      orders.splice(order_idx, 1);
+
+      this.setState({orders: orders});
+    }
+
+
     retrieveOrderDetail = (order) => {
       order = order.toUpperCase();
       const post_data = {order_name: order};
@@ -244,30 +270,31 @@ class OrderActivityContainer extends Component {
       const {speech_listener} = this.state;
       speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
     }
+
     findError = (error_code) => {
-        switch (error_code) {
-          case 1:
-           return dialog.NETWORK_TIME_OUT;
-          case 2:
-            return dialog.NETWORK_ERROR;
-          case 3:
-            return dialog.RECORD_AUDIO_ERROR
-          case 4: 
-            return dialog.SR_SERVER_ERROR;
-          case 5:
-            return dialog.CLIENT_ERROR;
-          case 6: 
-            return dialog.NO_SPEECH_INPUT;
-          case 7: 
-            return dialog.NO_MATCH_FOUND;
-          case 8: 
-            return dialog.SR_BUSY;          
-          case 9:
-            return dialog.INSUFFICIENT_PERMISSIONS;
-          default:
-            return error_code;  
-        }
+      switch (error_code) {
+        case 1:
+          return dialog.NETWORK_TIME_OUT;
+        case 2:
+          return dialog.NETWORK_ERROR;
+        case 3:
+          return dialog.RECORD_AUDIO_ERROR
+        case 4: 
+          return dialog.SR_SERVER_ERROR;
+        case 5:
+          return dialog.CLIENT_ERROR;
+        case 6: 
+          return dialog.NO_SPEECH_INPUT;
+        case 7: 
+          return dialog.NO_MATCH_FOUND;
+        case 8: 
+          return dialog.SR_BUSY;          
+        case 9:
+          return dialog.INSUFFICIENT_PERMISSIONS;
+        default:
+          return error_code;  
       }
+    }
     render () {
       const {
         orders,
@@ -278,6 +305,7 @@ class OrderActivityContainer extends Component {
       const startSpeechListener = this.startSpeechListener;
       const stopSpeechListener = this.stopSpeechListener;
       const modifyOrderEntry = this.modifyOrderEntry;
+      const deleteOrderEntry = this.deleteOrderEntry;
 
       let order_list_display = (
         orders.map(order => {
@@ -289,6 +317,7 @@ class OrderActivityContainer extends Component {
             order_subtotal = {order.order_subtotal}
             order_qty = {order.order_qty}
             modifyOrderEntry = {modifyOrderEntry}
+            deleteOrderEntry = {deleteOrderEntry}
             />
           );
         })
