@@ -1,1 +1,2 @@
 export const AUTHORIZE_USER  = 'AUTHORIZE_USER';
+export const UPDATE_ORDERS = 'UPDATE_ORDERS';

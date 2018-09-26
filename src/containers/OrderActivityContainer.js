@@ -259,7 +259,7 @@ class OrderActivityContainer extends Component {
     }
 
     getAllMenu = () => {
-        axios.get(url.GET_ALL_MENU)
+        axios.get(url.RETRIEVE_MENU)
         .then(response => {
           const menu = response.data.map(m => m.Name);
           this.setState({menu: menu});

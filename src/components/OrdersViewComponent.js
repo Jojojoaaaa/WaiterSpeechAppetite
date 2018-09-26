@@ -7,7 +7,7 @@ import StepIndicator from 'react-native-step-indicator';
 
 
 export default function OrdersViewComponent(props) {
-    const labels = ["Cart","Delivery Address","Order Summary","Payment Method","Track"];
+    const labels = ["Cart","Delivery Address","Order Summary"];
     const customStyles = {
         stepIndicatorSize: 25,
         currentStepIndicatorSize:30,
