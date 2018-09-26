@@ -60,6 +60,7 @@ class LoginContainer extends Component {
   handleChange = (name, value) => {
     this.setState({[name] : value});
   }
+
   render() {
     return (
       <LoginComponent
