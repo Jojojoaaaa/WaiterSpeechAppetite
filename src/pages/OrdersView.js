@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import OrdersViewContainer from '../containers/OrderActivityContainer';
+import OrdersViewContainer from '../containers/OrdersViewContainer';
 
 import {
     View

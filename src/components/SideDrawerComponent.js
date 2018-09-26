@@ -66,7 +66,7 @@ export default function SideDrawerComponent(props) {
                 <Button
                     hide = {!open}
                     title={'View Orders'}
-                    onPress={() => onClick()}/>
+                    onPress={() => props.toOrderView()}/>
             </View>
         </View>
     )
