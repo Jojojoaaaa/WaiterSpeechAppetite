@@ -4,19 +4,19 @@ import {
     Text, 
     Image,
     TouchableNativeFeedback} from 'react-native';
-
+import style from '../styles/HomeStyles';
 import mic from '../assets/mic.png';
 
 export default function HomeComponent(props) {
     const {speechHandler} = props;
     return (
-        <View style = {{paddingTop: 100}}> 
+        <View style = {style.container}> 
             <Text>Big Text ni Sa</Text>
             <Text>Tap the button to create order</Text>
             <TouchableNativeFeedback
                 onPress={() => speechHandler()}>
                 <Image
-                    style={{height: 80, width: 80}}
+                    style={style.image}
                     source={mic}/>
             </TouchableNativeFeedback>
         </View>

@@ -1,10 +1,11 @@
 import React, {Component}from 'react';
 import HomeContainer from '../containers/HomeContainer';
+import SideDrawerContainer from '../containers/SideDrawerContainer';
+import Aux from '../hoc/Aux';
+
 import {
-    SpeechRecognizer,
-    RecognizerIntent,
-    RecognitionListener
-  } from 'react-native-android-speech-recognizer';
+    View
+} from 'react-native';
 
 export default class Home extends Component {
     constructor (props){
@@ -12,7 +13,10 @@ export default class Home extends Component {
     }
     render() {
         return (
-            <HomeContainer/>
+            <View>
+                <HomeContainer/>   
+                <SideDrawerContainer/>
+            </View>
         )
     }
 }

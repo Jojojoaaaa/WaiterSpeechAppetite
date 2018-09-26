@@ -16,7 +16,7 @@ import {OrderActivityComponent , OrderEntry} from '../components/OrderActivityCo
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
 import * as url from '../constants/urls';
-import * as method from '../constants/method';
+import * as method from '../constants/type';
 import * as routes from '../constants/routes';
 
 

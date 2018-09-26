@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import Login from './src/pages/Login';
 import Home from './src/pages/Home'
 import OrderActivity from './src/pages/OrderActivity'
+import OrdersView from './src/pages/OrdersView';
 import * as routes from './src/constants/routes';
 
 //store
@@ -31,6 +32,7 @@ export default class App extends Component {
               <Route exact path={routes.HOME} component ={Home}/>
               <Route exact path={routes.LOGIN} component = {Login}/>
               <Route exact path={routes.ORDER_ACTIVITY} component = {OrderActivity}/>
+              <Route exact path={routes.ORDERS_VIEW} component = {OrdersView}/>
           </View>
         </NativeRouter>
       </Provider>  

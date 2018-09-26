@@ -5,34 +5,32 @@ import {
     View,
     Image, 
     Button} from 'react-native';
-import img from '../assets/img.jpg';
+import style from '../styles/LoginStyles';
 
+import img from '../assets/img.jpg';
 export default function LoginComponent(props) {
     const { handleLogin,
             handleChange,
             } = props;
 
     return (
-        <View style = {{
-            paddingTop: 50,
-            justifyContent: 'center',
-            alignItems: 'center',}}>
+        <View style = {style.container}>
             <Image
-            style = {{width: 200, height: 200, marginBottom: 100,  borderRadius: 150 }} 
+            style = {style.image} 
             source = {img} />
             <TextInput
-                style={{width: 200, height: 40, marginBottom: 15, borderColor: 'orange', borderWidth:1}}
+                style={style.text_input}
                 placeholder ="Waiter ID"        
                 onChangeText ={(text) => handleChange('waiter_id', text)}
                 />
             <TextInput
-                style={{width: 200, height: 40, marginBottom: 15, borderColor: 'orange', borderWidth:1}}
+                style={style.text_input}
                 placeholder ="Password"
                 secureTextEntry ={true}
                 onChangeText ={(text) => handleChange('password', text)}                
                 />
                 <Button 
-                    style = {{width: 150, borderRadius: 15}}
+                    style = {style.button}
                     onPress = {() => handleLogin()}
                     title="Login"  
                     color = 'red'/>
