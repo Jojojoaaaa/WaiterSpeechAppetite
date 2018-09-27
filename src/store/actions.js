@@ -13,11 +13,11 @@ export const unauthorizeUser = () => {
     }
 }
 
-export const setOrdersRecord = (orders_record, orders_ready) => {
+export const setOrdersRecord = (orders_record, orders_ready_count) => {
     return {
         type: actionTypes.SET_ORDERS_RECORD,
         orders_record: orders_record,
-        orders_ready: orders_ready
+        orders_ready_count: orders_ready_count
     }
 }
 // export const updateOrders = (newOrders) => {

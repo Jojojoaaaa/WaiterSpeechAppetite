@@ -25,6 +25,7 @@
     "react-native": "~0.55.2",
     "react-native-android-speech-recognizer": "0.0.3",
     "react-native-axios": "^0.17.1",
+    "react-native-material-bottom-navigation": "^1.0.1",
     "react-native-step-indicator": "0.0.9",
     "react-native-swipeout": "^2.3.6",
     "react-redux": "^5.0.7",

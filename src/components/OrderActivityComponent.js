@@ -66,18 +66,23 @@ export function OrderEntry(props) {
     )
 }
 
-export function OrderActivityComponent(props) {
+export default function OrderActivityComponent(props) {
     const {
         table_number, 
         total,
         startSpeechListener,
-        stopSpeechListener} = props;
+        goToHome} = props;
 
     return (
         <View style ={style.container}>
             {/* will be header later; */}
             <View style={{height: '20%', backgroundColor: 'orange'}}/>
-
+            <TouchableNativeFeedback
+                    onPress={() => goToHome()}>
+                <Image
+                style={style.image_button}
+                source={add}/>
+            </TouchableNativeFeedback>
             <Text>TABLE NUMBER: {table_number}</Text>
             <Text>TOTAL: Php {total}</Text>
 

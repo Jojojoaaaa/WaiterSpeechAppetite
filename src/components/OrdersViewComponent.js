@@ -5,6 +5,8 @@ import {
     ScrollView
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import StepIndicator from 'react-native-step-indicator';
 
 import styles, {customStyles} from '../styles/OrderViewStyles';
@@ -21,7 +23,8 @@ export function OrdersEntry(props) {
         order_id,
     } = props;
     return (
-        <View>
+        <View
+            style = {styles.order_entry}>
             <Text>Table Number: {table_number}</Text>
             <Text>Order ID: {order_id}</Text>
             <StepIndicator

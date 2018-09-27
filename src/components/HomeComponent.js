@@ -14,7 +14,7 @@ export default function HomeComponent(props) {
         speechHandler,
         viewOrders,
         logOutHandler,
-        orders_ready} = props;
+        orders_ready_count} = props;
     return (
         <View style = {style.container}> 
             <Text>Big Text ni Sa</Text>
@@ -25,7 +25,7 @@ export default function HomeComponent(props) {
                     style={style.image}
                     source={mic}/>
             </TouchableNativeFeedback>
-            <Text>Orders Ready Badge: {orders_ready}</Text>
+            <Text>Orders Ready Badge: {orders_ready_count}</Text>
             <TouchableNativeFeedback
                 onPress={() => viewOrders()}>
                 <Image

@@ -15,7 +15,7 @@ import * as  commands from '../constants/speech_commands';
 import * as  routes from '../constants/routes';
 import * as  url from '../constants/urls';
 import * as  dialog from '../constants/user_dialogs';
-import * as status from '../constants/type';
+import * as type from '../constants/type';
 import * as  actions from '../store/actions';
 
 
@@ -38,7 +38,7 @@ class HomeContainer extends Component {
     }
   }
   componentDidMount() {
-   // console.log(this.props);
+   console.log(this.props);
   }
   initializeSpeechRecognizer = () => {
     SpeechRecognizer.createSpeechRecognizer()
@@ -68,8 +68,8 @@ class HomeContainer extends Component {
         'Type of Order',
         'Choose type of order',
         [
-          {text: 'Dine In', onPress: () => this.startCreatingOrders('DINE IN')},
-          {text: 'Take Out', onPress: () => this.startCreatingOrders('TAKE OUT')},
+          {text: 'Dine In', onPress: () => this.startCreatingOrders(type.DINE_IN)},
+          {text: 'Take Out', onPress: () => this.startCreatingOrders(type.TAKE_OUT)},
         ],
         { cancelable: true }
       )
@@ -111,11 +111,11 @@ class HomeContainer extends Component {
       axios.post(url.RETRIEVE_ORDERS, post_data)
         .then(response => {
             const orders_record = response.data;
-            let orders_ready = 0;
+            let orders_ready_count = 0;
             orders_record.forEach(o => {
-              orders_ready += status.READY_CHECK.test(o.status) ? 1 : 0;
+              orders_ready_count += type.READY_CHECK.test(o.status) ? 1 : 0;
             });
-            this.props.onSetOrders(orders_record, orders_ready);
+            this.props.onSetOrders(orders_record, orders_ready_count);
         })
   }
   speechHandler = () => {
@@ -134,13 +134,13 @@ class HomeContainer extends Component {
     const speechHandler = this.speechHandler;
     const viewOrders = this.viewOrders;
     const logOutHandler = this.logOutHandler;
-    const orders_ready = this.props.orders_ready;
+    const orders_ready_count = this.props.orders_ready_count;
       return (
           <HomeComponent
               speechHandler={speechHandler}
               viewOrders={viewOrders}
               logOutHandler={logOutHandler}
-              orders_ready={orders_ready} />
+              orders_ready_count={orders_ready_count} />
       )
   }
 }
@@ -149,14 +149,14 @@ mapStateToProps = state => {
   return {
     auth: state.auth,
     waiter_id: state.waiter_id,
-    orders_ready: state.orders_ready,
+    orders_ready_count: state.orders_ready_count,
     orders_record: state.orders_record
   };
 };
 mapDispatchToProps = dispatch => {
   return {
     onLogout: () => dispatch(actions.unauthorizeUser()),
-    onSetOrders: (orders_record, orders_ready) => dispatch(actions.setOrdersRecord(orders_record, orders_ready))
+    onSetOrders: (orders_record, orders_ready_count) => dispatch(actions.setOrdersRecord(orders_record, orders_ready_count))
   }
 }
 

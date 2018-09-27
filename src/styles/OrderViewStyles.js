@@ -25,6 +25,12 @@ export const customStyles = {
 }
 export default  style = StyleSheet.create({
     orders_container: {
-        height:'60%', 
+        height:'90%'
+    },
+    order_entry: {
+        borderColor: 'pink', 
+        borderWidth:3,
+        padding: 10,
+        margin: 5
     }
 });

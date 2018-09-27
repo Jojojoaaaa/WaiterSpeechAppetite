@@ -12,7 +12,7 @@ import axios from '../axios';
 
 import {View, Alert, Text} from 'react-native';
 
-import {OrderActivityComponent , OrderEntry} from '../components/OrderActivityComponent';
+import OrderActivityComponent , {OrderEntry} from '../components/OrderActivityComponent';
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
 import * as url from '../constants/urls';
@@ -250,7 +250,6 @@ class OrderActivityContainer extends Component {
       this.setState({orders: orders});
     }
 
-
     retrieveOrderDetail = (order) => {
       order = order.toUpperCase();
       const post_data = {order_name: order};
@@ -258,6 +257,18 @@ class OrderActivityContainer extends Component {
          axios.post(url.RETRIEVE_ORDER_DETAIL, post_data)
           .then(response =>  response.data)
         );
+    }
+
+    goToHome = () => {
+      Alert.alert(
+        'Go to Home',
+        'Are you sure? You will lose any entry recorded in this page.',
+        [
+          {text: 'Go Home', onPress: () => this.props.history.push(routes.HOME)},
+          {text: 'Stay'},
+        ],
+        { cancelable: false }
+      )
     }
 
     getAllMenu = () => {
@@ -308,6 +319,7 @@ class OrderActivityContainer extends Component {
       const stopSpeechListener = this.stopSpeechListener;
       const modifyOrderEntry = this.modifyOrderEntry;
       const deleteOrderEntry = this.deleteOrderEntry;
+      const goToHome = this.goToHome;
 
       let order_list_display = (
         orders.map(order => {
@@ -330,7 +342,8 @@ class OrderActivityContainer extends Component {
             table_number = {table_number}
             total = {total}
             startSpeechListener = {startSpeechListener}
-            stopSpeechListener = {stopSpeechListener}>
+            stopSpeechListener = {stopSpeechListener}
+            goToHome = {goToHome}>
             {order_list_display}
           </OrderActivityComponent>
         </View>    

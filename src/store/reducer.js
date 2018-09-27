@@ -4,7 +4,7 @@ const initialState = {
     auth: false,
     waiter_id: '',
     orders_record: [],
-    orders_ready: 0
+    orders_ready_count: 0
 }
 
 const reducer = (state = initialState, action ) => {
@@ -17,8 +17,9 @@ const reducer = (state = initialState, action ) => {
             
         case actionTypes.SET_ORDERS_RECORD:
             const orders_record = action.orders_record;
-            const orders_ready = action.orders_ready;       
-            return {...state, orders_record: orders_record, orders_ready: orders_ready};
+            const orders_ready_count = action.orders_ready_count;  
+            return {...state, orders_record: orders_record, 
+                        orders_ready_count: orders_ready_count};
         // case actionTypes.UPDATE_ORDERS: 
         //     const new_orders = [...action.newOrders];
         //     const state_orders = [...state.orders];

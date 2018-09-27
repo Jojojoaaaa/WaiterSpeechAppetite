@@ -10,3 +10,6 @@ export const PENDING = 'Pending';
 export const READY = 'Ready';
 export const SERVED ='Served';
 export const PAID = 'Paid';
+
+export const DINE_IN = 'DINE IN';
+export const TAKE_OUT = 'TAKE OUT';
