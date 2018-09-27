@@ -1,39 +1,58 @@
 import React from 'react';
 import {
-    TextInput, 
+    TextInput,
     Text , 
     View,
-    Image, 
-    Button} from 'react-native';
+    Image,
+    TouchableOpacity
+    } from 'react-native';
 import style from '../styles/LoginStyles';
+import img from '../assets/SAI.png';
+import Btn from 'react-native-micro-animated-button';
+import {Fumi }  from 'react-native-textinput-effects';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Modal from "react-native-modal";
 
-import img from '../assets/img.jpg';
+
 export default function LoginComponent(props) {
     const { handleLogin,
-            handleChange,
+            handleChange
             } = props;
-
+    
     return (
         <View style = {style.container}>
             <Image
             style = {style.image} 
             source = {img} />
-            <TextInput
+
+             <Fumi
                 style={style.text_input}
-                placeholder ="Waiter ID"        
+                label={'Waiter ID'}
+                iconClass={MaterialIcons}
+                iconName={'account-circle'}
+                iconColor={'#edc589'}
+                iconSize={20}
                 onChangeText ={(text) => handleChange('waiter_id', text)}
-                />
-            <TextInput
+            />
+            <Fumi
                 style={style.text_input}
-                placeholder ="Password"
-                secureTextEntry ={true}
-                onChangeText ={(text) => handleChange('password', text)}                
+                label={'Password'}
+                iconClass={MaterialIcons}
+                iconName={'lock'}
+                iconColor={'#da8c75'}
+                iconSize={20}
+                secureTextEntry={true}
+                onChangeText ={(text) => handleChange('password', text)}
+            />
+            
+            <Btn
+                style={style.button}
+                label="Login"
+                onPress={() => handleLogin(this.btn)}
+                ref={ref => (this.btn = ref)}
+                foregroundColor={'white'}
                 />
-                <Button 
-                    style = {style.button}
-                    onPress = {() => handleLogin()}
-                    title="Login"  
-                    color = 'red'/>
+
         </View>
     );
 }
