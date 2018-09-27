@@ -11,9 +11,7 @@ export default class Home extends Component {
     }
     render() {
         return (
-            <View>
-                <HomeContainer/>   
-            </View>
+            <HomeContainer/>       
         )
     }
 }

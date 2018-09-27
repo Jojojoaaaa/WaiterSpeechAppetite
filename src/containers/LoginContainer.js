@@ -47,7 +47,7 @@ class LoginContainer extends Component {
       const {password, waiter_id} = this.state;
       if (password === result_json.password){
         this.props.onLogin(waiter_id);
-        this.props.history.push(routes.ORDER);
+        this.props.history.push(routes.HOME);
       }
       else {
         Alert.alert(dialog.INCORRECT_PASSWORD);
