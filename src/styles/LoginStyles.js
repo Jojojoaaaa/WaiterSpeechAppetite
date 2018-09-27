@@ -27,11 +27,13 @@ export default  style = StyleSheet.create({
 
     modalContent:{
         backgroundColor: 'white',
-        padding: 22,
+        marginTop:100,
+        marginLeft:50,
+        marginRight:50,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
+        borderColor: 'rgba(0,0,0,0.5)',
       }
 
 });

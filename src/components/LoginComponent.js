@@ -4,6 +4,7 @@ import {
     Text , 
     View,
     Image,
+    TouchableHighlight,
     TouchableOpacity
     } from 'react-native';
 import style from '../styles/LoginStyles';
@@ -11,12 +12,15 @@ import img from '../assets/SAI.png';
 import Btn from 'react-native-micro-animated-button';
 import {Fumi }  from 'react-native-textinput-effects';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Modal from "react-native-modal";
+import Modal from 'react-native-modal';
+
 
 
 export default function LoginComponent(props) {
     const { handleLogin,
-            handleChange
+            handleChange,
+            setModalVisible,
+            modalVisible
             } = props;
     
     return (
@@ -52,6 +56,29 @@ export default function LoginComponent(props) {
                 ref={ref => (this.btn = ref)}
                 foregroundColor={'white'}
                 />
+
+            <Modal
+                visible={modalVisible}
+                >
+                <View style={style.modalContent}>
+                    <View>
+                    <Text>Hello World!</Text>
+
+                    <TouchableHighlight
+                        onPress={() => {setModalVisible(!modalVisible);
+                        }}>
+                        <Text>Hide Modal</Text>
+                    </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
+
+            <TouchableOpacity
+                onPress={() => {
+                    setModalVisible(true);
+                  }}>
+                <Text>Show Modal</Text>
+                </TouchableOpacity>
 
         </View>
     );

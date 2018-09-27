@@ -16,10 +16,14 @@ class LoginContainer extends Component {
     super(props);
     this.state = {
       waiter_id: "",
-      password: ""
+      password: "",
+      modalVisible: false
     }
   }
-  
+
+  setModalVisible = (visible) => {
+    this.setState({modalVisible: visible});
+  }
 
   handleLogin = (btn) => {
     let {waiter_id} = this.state;
@@ -71,6 +75,9 @@ class LoginContainer extends Component {
       <LoginComponent
         handleLogin = {this.handleLogin}
         handleChange = {this.handleChange}
+        setModalVisible = {this.setModalVisible}
+        modalVisible = {this.state.modalVisible}
+        visibleModal = {this.state.visibleModal}
         />
     );
   }
