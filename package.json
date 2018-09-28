@@ -30,6 +30,7 @@
     "react-native-md-motion-buttons": "^1.1.0",
     "react-native-micro-animated-button": "0.0.27",
     "react-native-modal": "^6.5.0",
+    "react-native-material-bottom-navigation": "^1.0.1",
     "react-native-step-indicator": "0.0.9",
     "react-native-swipeout": "^2.3.6",
     "react-native-textinput-effects": "^0.4.2",

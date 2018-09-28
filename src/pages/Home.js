@@ -1,6 +1,5 @@
 import React, {Component}from 'react';
 import HomeContainer from '../containers/HomeContainer';
-import SideDrawerContainer from '../containers/SideDrawerContainer';
 
 import {
     View
@@ -12,10 +11,7 @@ export default class Home extends Component {
     }
     render() {
         return (
-            <View>
-                <HomeContainer/>   
-                <SideDrawerContainer/>
-            </View>
+            <HomeContainer/>       
         )
     }
 }

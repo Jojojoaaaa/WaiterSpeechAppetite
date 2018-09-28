@@ -12,7 +12,7 @@ import axios from '../axios';
 
 import {View, Alert, Text} from 'react-native';
 
-import {OrderActivityComponent , OrderEntry} from '../components/OrderActivityComponent';
+import OrderActivityComponent , {OrderEntry} from '../components/OrderActivityComponent';
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
 import * as url from '../constants/urls';
@@ -36,9 +36,6 @@ class OrderActivityContainer extends Component {
     componentWillMount() {
         this.initializeSpeechRecognizer();
         // this.getAllMenu();
-    }
-
-    componentDidMount() {
     }
 
     initializeSpeechRecognizer = () => {
@@ -68,16 +65,7 @@ class OrderActivityContainer extends Component {
           return _break;
         }
         else if (commands.CONFIRM_ORDER.test(speech)){
-          Alert.alert(
-            'Confirm Order',
-            'Are you sure?',
-            [
-              {text: 'Confirm Order', onPress: () => this.confirmOrder()},
-              {text: 'Modify Order'},
-              //{text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            { cancelable: false }
-          )
+          this.confirmOrder();
           return _break; 
         }
         else if (commands.ADD_ENTRY.test(speech)) {
@@ -172,9 +160,24 @@ class OrderActivityContainer extends Component {
         Alert.alert(dialog.NO_ORDER_ENTRY)
       }
       else {
-        this.insertOrders()
+        Alert.alert(
+          'Confirm Order',
+          'Are you sure?',
+          [
+            {text: 'Confirm Order', onPress: () => this.processInsertingOrders()},
+            {text: 'Modify Order'},
+            //{text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
+      }
+    }
+    processInsertingOrders = () => {
+      this.insertOrders()
           .then(res => {
             const order_id = res.order_id;
+            console.log(res)
+            console.log((order_id));
             if (!(order_id < 0)){
               this.insertOrderDetail(order_id);
             }
@@ -182,16 +185,15 @@ class OrderActivityContainer extends Component {
               Alert.alert('Something went wrong');
             }
           })
-      }
     }
-
     insertOrders = () => {
       let post_data = {
         status : 'PENDING',
         table_number : this.state.table_number,
         timestamp : moment().format('LLL'),
         total : this.state.total,
-        waiter_id: this.props.waiter_id
+        waiter_id: this.props.waiter_id,
+        order_type: this.props.location.order_type
       };
       return (
         axios.post(url.INSERT_ORDERS, post_data)
@@ -248,7 +250,6 @@ class OrderActivityContainer extends Component {
       this.setState({orders: orders});
     }
 
-
     retrieveOrderDetail = (order) => {
       order = order.toUpperCase();
       const post_data = {order_name: order};
@@ -258,8 +259,20 @@ class OrderActivityContainer extends Component {
         );
     }
 
+    goToHome = () => {
+      Alert.alert(
+        'Go to Home',
+        'Are you sure? You will lose any entry recorded in this page.',
+        [
+          {text: 'Go Home', onPress: () => this.props.history.push(routes.HOME)},
+          {text: 'Stay'},
+        ],
+        { cancelable: false }
+      )
+    }
+
     getAllMenu = () => {
-        axios.get(url.GET_ALL_MENU)
+        axios.get(url.RETRIEVE_MENU)
         .then(response => {
           const menu = response.data.map(m => m.Name);
           this.setState({menu: menu});
@@ -306,6 +319,7 @@ class OrderActivityContainer extends Component {
       const stopSpeechListener = this.stopSpeechListener;
       const modifyOrderEntry = this.modifyOrderEntry;
       const deleteOrderEntry = this.deleteOrderEntry;
+      const goToHome = this.goToHome;
 
       let order_list_display = (
         orders.map(order => {
@@ -328,7 +342,8 @@ class OrderActivityContainer extends Component {
             table_number = {table_number}
             total = {total}
             startSpeechListener = {startSpeechListener}
-            stopSpeechListener = {stopSpeechListener}>
+            stopSpeechListener = {stopSpeechListener}
+            goToHome = {goToHome}>
             {order_list_display}
           </OrderActivityComponent>
         </View>    

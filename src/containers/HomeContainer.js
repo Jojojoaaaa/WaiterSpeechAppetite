@@ -6,13 +6,17 @@ import {
   } from 'react-native-android-speech-recognizer';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-native'
+import axios from '../axios';
 
 import {View, Alert, Text} from 'react-native';
 
 import HomeComponent from '../components/HomeComponent';
 import * as  commands from '../constants/speech_commands';
 import * as  routes from '../constants/routes';
+import * as  url from '../constants/urls';
 import * as  dialog from '../constants/user_dialogs';
+import * as type from '../constants/type';
+import * as  actions from '../store/actions';
 
 
 class HomeContainer extends Component {
@@ -25,13 +29,16 @@ class HomeContainer extends Component {
   }
 
   componentWillMount () {
-    console.log(this.props);
     if (!this.props.auth) {
       this.props.history.push(routes.LOGIN);
     }
     else {
      this.initializeSpeechRecognizer();
+     this.getAllOrdersRecord();
     }
+  }
+  componentDidMount() {
+   console.log(this.props);
   }
   initializeSpeechRecognizer = () => {
     SpeechRecognizer.createSpeechRecognizer()
@@ -57,11 +64,22 @@ class HomeContainer extends Component {
       }
     });
     if (success) {
-      this.props.history.push(routes.ORDER_ACTIVITY);
+      Alert.alert(
+        'Type of Order',
+        'Choose type of order',
+        [
+          {text: 'Dine In', onPress: () => this.startCreatingOrders(type.DINE_IN)},
+          {text: 'Take Out', onPress: () => this.startCreatingOrders(type.TAKE_OUT)},
+        ],
+        { cancelable: true }
+      )
     }
     else {
       Alert.alert(dialog.SPEECH_COMMAND_404);
     }
+  }
+  startCreatingOrders = (order_type) => {
+    this.props.history.push({pathname: routes.ORDER_ACTIVITY, order_type: order_type});
   }
 
   findError = (error_code) => {
@@ -88,15 +106,41 @@ class HomeContainer extends Component {
         return error_code;  
     }
   }
-   
+  getAllOrdersRecord = () => {
+    const post_data = {waiter_id: this.props.waiter_id}
+      axios.post(url.RETRIEVE_ORDERS, post_data)
+        .then(response => {
+            const orders_record = response.data;
+            let orders_ready_count = 0;
+            orders_record.forEach(o => {
+              orders_ready_count += type.READY_CHECK.test(o.status) ? 1 : 0;
+            });
+            this.props.onSetOrders(orders_record, orders_ready_count);
+        })
+  }
   speechHandler = () => {
     const {speech_listener} = this.state;
     speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
   }
+  viewOrders = () => {
+    this.props.history.push(routes.ORDERS_VIEW);
+  }
+
+  logOutHandler = () => {
+    this.props.onLogout();
+    this.props.history.push(routes.LOGIN);
+  }
   render() {
+    const speechHandler = this.speechHandler;
+    const viewOrders = this.viewOrders;
+    const logOutHandler = this.logOutHandler;
+    const orders_ready_count = this.props.orders_ready_count;
       return (
           <HomeComponent
-              speechHandler ={this.speechHandler}/>
+              speechHandler={speechHandler}
+              viewOrders={viewOrders}
+              logOutHandler={logOutHandler}
+              orders_ready_count={orders_ready_count} />
       )
   }
 }
@@ -104,9 +148,16 @@ class HomeContainer extends Component {
 mapStateToProps = state => {
   return {
     auth: state.auth,
-    waiter_id: state.waiter_id
+    waiter_id: state.waiter_id,
+    orders_ready_count: state.orders_ready_count,
+    orders_record: state.orders_record
   };
 };
+mapDispatchToProps = dispatch => {
+  return {
+    onLogout: () => dispatch(actions.unauthorizeUser()),
+    onSetOrders: (orders_record, orders_ready_count) => dispatch(actions.setOrdersRecord(orders_record, orders_ready_count))
+  }
+}
 
-
-export default connect(mapStateToProps)(withRouter(HomeContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(HomeContainer));
