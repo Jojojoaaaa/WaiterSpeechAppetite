@@ -17,21 +17,27 @@ class LoginContainer extends Component {
     this.state = {
       waiter_id: "",
       password: "",
+      modalVisible: false
     }
   }
 
-  handleLogin = () => {
+  setModalVisible = (visible) => {
+    this.setState({modalVisible: visible});
+  }
+
+  handleLogin = (btn) => {
     let {waiter_id} = this.state;
     waiter_id = waiter_id.trim();
     const post_data = {waiter_id:waiter_id};
     this.processLogin(post_data)
       .then(res => {
         console.log(res);
-        this.validateWaiter(res)
+        this.validateWaiter(res,btn)
       })
       .catch(err => {
         console.log(err);
         Alert.alert(dialog.SERVER_ERROR);
+        
       })
     
   }
@@ -42,7 +48,7 @@ class LoginContainer extends Component {
       .catch(error => error.response)
     )
   }
-  validateWaiter = (result_json) => {
+  validateWaiter = (result_json,btn) => {
     if (result_json.result>0){
       const {password, waiter_id} = this.state;
       if (password === result_json.password){
@@ -51,20 +57,28 @@ class LoginContainer extends Component {
       }
       else {
         Alert.alert(dialog.INCORRECT_PASSWORD);
+        btn.reset();
+      
       }
     }
     else {
       Alert.alert(dialog.NO_WAITER_ID);
+      btn.reset();
     }
   }
   handleChange = (name, value) => {
     this.setState({[name] : value});
   }
+
   render() {
     return (
       <LoginComponent
         handleLogin = {this.handleLogin}
-        handleChange = {this.handleChange}/>
+        handleChange = {this.handleChange}
+        setModalVisible = {this.setModalVisible}
+        modalVisible = {this.state.modalVisible}
+        visibleModal = {this.state.visibleModal}
+        />
     );
   }
 }

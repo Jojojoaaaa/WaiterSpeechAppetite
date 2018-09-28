@@ -35,7 +35,7 @@ class OrderActivityContainer extends Component {
 
     componentWillMount() {
         this.initializeSpeechRecognizer();
-        this.getAllMenu();
+        // this.getAllMenu();
     }
 
     componentDidMount() {
