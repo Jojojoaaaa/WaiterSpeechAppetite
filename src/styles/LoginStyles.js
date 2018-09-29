@@ -18,13 +18,6 @@ export default  style = StyleSheet.create({
         marginBottom: 15
     },
 
-    button:{
-        marginTop: 50,
-        width:150,
-        backgroundColor: '#da8c75',
-        borderColor: 'transparent'   
-    },
-
     modalContent:{
         backgroundColor: 'white',
         marginTop:100,

@@ -117,7 +117,10 @@ class HomeContainer extends Component {
             });
             this.props.onSetOrders(orders_record, orders_ready_count);
         })
+    setTimeout(this.getAllOrdersRecord, 2000);
   }
+
+
   speechHandler = () => {
     const {speech_listener} = this.state;
     speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});

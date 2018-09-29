@@ -14,7 +14,12 @@ import {Fumi }  from 'react-native-textinput-effects';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Modal from 'react-native-modal';
 
-
+buttonStyles = {
+    marginTop: 50,
+    width:150,
+    backgroundColor: '#da8c75',
+    borderColor: 'transparent'   
+}
 
 export default function LoginComponent(props) {
     const { handleLogin,
@@ -48,15 +53,16 @@ export default function LoginComponent(props) {
                 secureTextEntry={true}
                 onChangeText ={(text) => handleChange('password', text)}
             />
-            
+            <TouchableOpacity
+                 onPress={() => handleLogin(this.btn)}>
             <Btn
-                style={style.button}
+                style={buttonStyles}
                 label="Login"
-                onPress={() => handleLogin(this.btn)}
+                //onPress={() => handleLogin(this.btn)}
                 ref={ref => (this.btn = ref)}
                 foregroundColor={'white'}
                 />
-
+            </TouchableOpacity>
             <Modal
                 visible={modalVisible}
                 >
