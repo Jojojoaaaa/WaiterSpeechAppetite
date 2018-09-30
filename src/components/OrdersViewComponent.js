@@ -3,14 +3,19 @@ import {
     View,
     Text,
     ScrollView,
+    TouchableNativeFeedback,
+    Image
 } from 'react-native';
-
+import Swipeout from 'react-native-swipeout';
 import StepIndicator from 'react-native-step-indicator';
 import BottomNavigation, { FullTab } from 'react-native-material-bottom-navigation';
 
-import styles, {customStyles} from '../styles/OrderViewStyles';
+import add from '../assets/add.png';
 
 import * as status from '../constants/type';
+
+import styles, {customStyles} from '../styles/OrderViewStyles';
+
 
 const labels = [status.PENDING, status.READY, status.SERVED, status.PAID];
 const count = 4;
@@ -20,11 +25,10 @@ export function OrdersEntry(props) {
         pos,
         table_number,
         order_id,
+        order_status
     } = props;
-
-    return (
-        <View
-            style = {styles.order_entry}>
+    let orders_entry = (    
+        <View style = {styles.order_entry}>     
             <Text>Table Number: {table_number}</Text>
             <Text>Order ID: {order_id}</Text>
             <StepIndicator
@@ -33,14 +37,32 @@ export function OrdersEntry(props) {
                 labels={labels}
                 stepCount={count}
             />
-
-        </View>
+        </View>  
+    )
+    var swipeoutBtns = [
+        {
+          text: 'Serve',
+          backgroundColor: 'green',
+          onPress: () => {console.log('pressed')}
+        }
+      ]
+    return (
+        (status.READY_CHECK.test(order_status)) 
+        ?
+        <Swipeout
+            left={swipeoutBtns} 
+            backgroundColor={'transparent'}
+            autoClose={true}> 
+            {orders_entry}
+        </Swipeout>
+        : 
+        orders_entry
     )
 }
-
 export default function OrdersViewComponent(props) {
     const{
-        changeTab
+        changeTab,
+        goToHome
         } = props;
 
     const tabs = [
@@ -95,7 +117,14 @@ export default function OrdersViewComponent(props) {
         />
     )
     return (
-        <View>
+        <View
+            style={styles.container}>
+            <TouchableNativeFeedback
+                    onPress={() => goToHome()}>
+                <Image
+                style={styles.image_button}
+                source={add}/>
+            </TouchableNativeFeedback>
             <ScrollView style={styles.orders_container}>
                 {props.children}
             </ScrollView>

@@ -10,7 +10,8 @@ export default  style = StyleSheet.create({
         height: 20
     },
     container: {
-        backgroundColor: '#d3d3d3'
+        backgroundColor: '#d3d3d3',
+        height: '100%'
     },
     orders_container: {
         height:'60%', 

@@ -52,7 +52,7 @@ class LoginContainer extends Component {
     if (result_json.result>0){
       const {password, waiter_id} = this.state;
       if (password === result_json.password){
-        this.props.onLogin(waiter_id);
+        this.props.onLogin(waiter_id.trim());
         this.props.history.push(routes.HOME);
       }
       else {

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {View } from 'react-native'
+import {View, Alert } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux';
 
 import axios from '../axios';
 import * as url from '../constants/urls';
 import * as status from '../constants/type';
+import * as  routes from '../constants/routes';
 
 import * as  actions from '../store/actions';
 
@@ -20,6 +21,7 @@ class OrdersViewContainer extends Component {
            orders_served: [],
            orders_paid: [],
            current_orders_view: [],
+           active_tab: status.READY
         };
     }
     componentWillMount() {
@@ -27,6 +29,7 @@ class OrdersViewContainer extends Component {
     }
     componentDidMount(){
         this.getAllOrdersRecord();
+        this.updateCurrentView();
     }
     groupOrders = () => {
         const orders = this.props.orders_record;
@@ -57,12 +60,12 @@ class OrdersViewContainer extends Component {
             orders_ready : orders_ready,
             orders_served : orders_served,
             orders_paid : orders_paid,
-            current_orders_view: orders_ready
         });
        console.log('re render');
     }
     getAllOrdersRecord = () => {
         const post_data = {waiter_id: this.props.waiter_id}
+
           axios.post(url.RETRIEVE_ORDERS, post_data)
             .then(response => {
                 const orders_record = response.data;
@@ -74,35 +77,51 @@ class OrdersViewContainer extends Component {
                 this.props.onSetOrders(orders_record, orders_ready_count);
             })
         this.groupOrders();
+        this.updateCurrentView();
         setTimeout(this.getAllOrdersRecord, 2000);
     }
     changeTab = (active_tab) => {
+        this.setState({
+            active_tab: active_tab
+        }, () =>   this.updateCurrentView());
+    }
+    updateCurrentView = () => {
         const {
             orders_ready,
             orders_served,
             orders_paid,
-            orders_pending} = this.state;
+            orders_pending,
+            active_tab} = this.state;
+    
         const orders = this.props.orders_record;
+        let current_orders_view = [];
+
         if (status.READY_CHECK.test(active_tab)){
-            this.setState({current_orders_view : orders_ready});
+            current_orders_view = orders_ready;
         }
         else if (status.SERVED_CHECK.test(active_tab)){
-            this.setState({current_orders_view: orders_served});
+            current_orders_view = orders_served;
         }
         else if (status.PAID_CHECK.test(active_tab)){
-            this.setState({current_orders_view: orders_paid});
+            current_orders_view = orders_paid;
         }
         else if (status.PENDING_CHECK.test(active_tab)) {
-            this.setState({current_orders_view: orders_pending});
+            current_orders_view = orders_pending;
         }
         else {
-            this.setState({current_orders_view: orders});
+            current_orders_view = orders;
         }
+        this.setState({
+            current_orders_view: current_orders_view,
+        })
     }
-   
+    goToHome = () => {
+        this.props.history.push(routes.HOME);
+      }
     render() {
         const { current_orders_view } = this.state;
         const changeTab = this.changeTab;
+        const goToHome = this.goToHome;
         const orders_view = current_orders_view.map(order => {
             return (
                 <OrdersEntry
@@ -110,13 +129,14 @@ class OrdersViewContainer extends Component {
                     pos = {order.pos}
                     table_number = {order.table_number}
                     order_id = {order.order_id}
+                    order_status = {order.status}
                 />
             )
         });
-
         return(
             <OrdersViewComponent
-                changeTab={changeTab}>
+                changeTab={changeTab}
+                goToHome={goToHome}>
             {orders_view}
             </OrdersViewComponent>
         )

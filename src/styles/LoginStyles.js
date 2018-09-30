@@ -2,9 +2,9 @@ import {StyleSheet} from 'react-native';
 
 export default  style = StyleSheet.create({
     container: {
-        paddingTop: 50,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: '100%'
     },
     image: {
         width: 200, 
