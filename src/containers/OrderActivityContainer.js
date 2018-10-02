@@ -37,7 +37,7 @@ class OrderActivityContainer extends Component {
         this.initializeSpeechRecognizer();
         this.getAllMenu();
     }
-
+    
     initializeSpeechRecognizer = () => {
         SpeechRecognizer.createSpeechRecognizer()
             .then( speech_listener => {
@@ -196,7 +196,7 @@ class OrderActivityContainer extends Component {
         order_type: this.props.location.order_type
       };
       return (
-        axios.post(url.INSERT_ORDERS, post_data)
+        axios.post(this.props.main_url + url.INSERT_ORDERS, post_data)
         .then(response => response.data)
         .catch(error => error.response)
       );
@@ -213,7 +213,7 @@ class OrderActivityContainer extends Component {
         }
       });
       const post_data = {orders : order_details};
-      axios.post(url.INSERT_ORDERS_DETAIL, post_data)
+      axios.post(this.props.main_url + url.INSERT_ORDERS_DETAIL, post_data)
         .then(response =>{
           console.log(response);
           Alert.alert('ORDER CONFIRMED');
@@ -254,7 +254,7 @@ class OrderActivityContainer extends Component {
       order = order.toUpperCase();
       const post_data = {order_name: order};
       return (
-         axios.post(url.RETRIEVE_ORDER_DETAIL, post_data)
+         axios.post(this.props.main_url + url.RETRIEVE_ORDER_DETAIL, post_data)
           .then(response =>  response.data)
         );
     }
@@ -272,9 +272,9 @@ class OrderActivityContainer extends Component {
     }
 
     getAllMenu = () => {
-        axios.get(url.RETRIEVE_MENU)
+        axios.get(this.props.main_url + url.RETRIEVE_MENU)
         .then(response => {
-          const menu = response.data.map(m => m.Name);
+          const menu = response.data.map(m => m.Name.toUpperCase());
           this.setState({menu: menu});
         });
     }
@@ -316,7 +316,6 @@ class OrderActivityContainer extends Component {
       } = this.state;
 
       const startSpeechListener = this.startSpeechListener;
-      const stopSpeechListener = this.stopSpeechListener;
       const modifyOrderEntry = this.modifyOrderEntry;
       const deleteOrderEntry = this.deleteOrderEntry;
       const goToHome = this.goToHome;
@@ -342,7 +341,6 @@ class OrderActivityContainer extends Component {
             table_number = {table_number}
             total = {total}
             startSpeechListener = {startSpeechListener}
-            stopSpeechListener = {stopSpeechListener}
             goToHome = {goToHome}>
             {order_list_display}
           </OrderActivityComponent>
@@ -353,7 +351,8 @@ class OrderActivityContainer extends Component {
 mapStateToProps = state => {
   return {
     auth: state.auth,
-    waiter_id: state.waiter_id
+    waiter_id: state.waiter_id,
+    main_url: state.main_url
   };
 };
 

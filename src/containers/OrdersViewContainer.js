@@ -31,6 +31,9 @@ class OrdersViewContainer extends Component {
         this.getAllOrdersRecord();
         this.updateCurrentView();
     }
+    componentWillUnmount() {
+        clearTimeout(this.update);
+      }
     groupOrders = () => {
         const orders = this.props.orders_record;
         let orders_pending = [];
@@ -66,7 +69,7 @@ class OrdersViewContainer extends Component {
     getAllOrdersRecord = () => {
         const post_data = {waiter_id: this.props.waiter_id}
 
-          axios.post(url.RETRIEVE_ORDERS, post_data)
+          axios.post(this.props.main_url + url.RETRIEVE_ORDERS, post_data)
             .then(response => {
                 const orders_record = response.data;
                 let orders_ready_count = 0;
@@ -78,7 +81,7 @@ class OrdersViewContainer extends Component {
             })
         this.groupOrders();
         this.updateCurrentView();
-        setTimeout(this.getAllOrdersRecord, 2000);
+       this.update =  setTimeout(this.getAllOrdersRecord, 2000);
     }
     changeTab = (active_tab) => {
         this.setState({
@@ -117,11 +120,32 @@ class OrdersViewContainer extends Component {
     }
     goToHome = () => {
         this.props.history.push(routes.HOME);
-      }
+    }
+
+    updateOrdersStatus = (orders_id, status_update) => {
+        const post_data = {
+            order_id: orders_id,
+            status_update: status_update
+        };
+        axios.post(this.props.main_url+url.UPDATE_ORDERS_STATUS, post_data)
+            .then(response => {
+                if (response.data > 0) {
+                    Alert.alert('*check icon*');
+                }
+                else {
+                    Alert.alert('*error icon*');
+                }
+            })
+            .catch(response =>{
+                Alert.alert('*error*');
+            })
+    }
     render() {
         const { current_orders_view } = this.state;
         const changeTab = this.changeTab;
         const goToHome = this.goToHome;
+        const updateOrdersStatus = this.updateOrdersStatus;
+
         const orders_view = current_orders_view.map(order => {
             return (
                 <OrdersEntry
@@ -130,6 +154,7 @@ class OrdersViewContainer extends Component {
                     table_number = {order.table_number}
                     order_id = {order.order_id}
                     order_status = {order.status}
+                    updateOrdersStatus = {updateOrdersStatus}
                 />
             )
         });
@@ -148,7 +173,8 @@ mapStateToProps = state => {
         auth: state.auth,
         waiter_id: state.waiter_id,
         orders_ready_count: state.orders_ready_count,
-        orders_record: state.orders_record
+        orders_record: state.orders_record,
+        main_url: state.main_url
     };
 };
 mapDispatchToProps = dispatch => {

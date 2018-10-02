@@ -43,7 +43,7 @@ class LoginContainer extends Component {
   }
   processLogin = (post_data) => {
     return (
-      axios.post(url.LOGIN, post_data)
+      axios.post(this.props.main_url + url.LOGIN, post_data)
       .then(response => response.data)
       .catch(error => error.response)
     )
@@ -85,7 +85,8 @@ class LoginContainer extends Component {
 
 mapStateToProps = state => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    main_url: state.main_url
   };
 };
 

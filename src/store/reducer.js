@@ -1,10 +1,11 @@
 import * as actionTypes from './actionTypes';
-
+import * as url from '../constants/urls';
 const initialState = {
     auth: false,
     waiter_id: '',
     orders_record: [],
-    orders_ready_count: 0
+    orders_ready_count: 0,
+    main_url: url.MAIN_URL
 }
 
 const reducer = (state = initialState, action ) => {
@@ -20,11 +21,6 @@ const reducer = (state = initialState, action ) => {
             const orders_ready_count = action.orders_ready_count;  
             return {...state, orders_record: orders_record, 
                         orders_ready_count: orders_ready_count};
-        // case actionTypes.UPDATE_ORDERS: 
-        //     const new_orders = [...action.newOrders];
-        //     const state_orders = [...state.orders];
-        //     const orders = state_orders.concat(new_orders);
-        //     return {...state, orders: orders}; 
 
         default: 
             return state;

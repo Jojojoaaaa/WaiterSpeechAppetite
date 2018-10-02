@@ -20,11 +20,4 @@ export const setOrdersRecord = (orders_record, orders_ready_count) => {
         orders_ready_count: orders_ready_count
     }
 }
-// export const updateOrders = (newOrders) => {
-//     return {
-//         type: actionTypes.UPDATE_ORDERS,
-//         newOrders: newOrders
-//     };
-// };
 
-// export const setOrders = ()

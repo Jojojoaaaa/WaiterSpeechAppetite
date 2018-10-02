@@ -25,8 +25,18 @@ export function OrdersEntry(props) {
         pos,
         table_number,
         order_id,
-        order_status
+        order_status,
+        updateOrdersStatus
     } = props;
+
+    var swipeoutBtns = [
+        {
+          text: 'Serve',
+          backgroundColor: 'green',
+          onPress: () => {updateOrdersStatus(order_id, status.SERVED)}
+        }
+      ]
+
     let orders_entry = (    
         <View style = {styles.order_entry}>     
             <Text>Table Number: {table_number}</Text>
@@ -39,13 +49,6 @@ export function OrdersEntry(props) {
             />
         </View>  
     )
-    var swipeoutBtns = [
-        {
-          text: 'Serve',
-          backgroundColor: 'green',
-          onPress: () => {console.log('pressed')}
-        }
-      ]
     return (
         (status.READY_CHECK.test(order_status)) 
         ?
