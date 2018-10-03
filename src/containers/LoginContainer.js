@@ -21,8 +21,13 @@ class LoginContainer extends Component {
     }
   }
 
-  setModalVisible = (visible) => {
-    this.setState({modalVisible: visible});
+  openModal = (btn) => {
+    this.setState({modalVisible:true});
+    btn.reset();
+  }
+
+  closeModal = () => {
+    this.setState({modalVisible:false});
   }
 
   handleLogin = (btn) => {
@@ -75,9 +80,9 @@ class LoginContainer extends Component {
       <LoginComponent
         handleLogin = {this.handleLogin}
         handleChange = {this.handleChange}
-        setModalVisible = {this.setModalVisible}
         modalVisible = {this.state.modalVisible}
-        visibleModal = {this.state.visibleModal}
+        openModal = {this.openModal}
+        closeModal = {this.closeModal}
         />
     );
   }
