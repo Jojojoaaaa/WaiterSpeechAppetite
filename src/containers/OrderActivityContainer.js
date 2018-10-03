@@ -110,7 +110,7 @@ class OrderActivityContainer extends Component {
                   order_price: res.price,
                   order_subtotal: res.price * qty,
                   order_qty: qty,
-                  order_category: res.category
+                  order_category_id: res.category_id
                 }
                 console.log(orders);
                 orders.push(order_detail);
@@ -166,7 +166,6 @@ class OrderActivityContainer extends Component {
           [
             {text: 'Confirm Order', onPress: () => this.processInsertingOrders()},
             {text: 'Modify Order'},
-            //{text: 'OK', onPress: () => console.log('OK Pressed')},
           ],
           { cancelable: false }
         )
@@ -258,7 +257,7 @@ class OrderActivityContainer extends Component {
           .then(response =>  response.data)
         );
     }
-
+   
     goToHome = () => {
       Alert.alert(
         'Go to Home',
@@ -283,6 +282,7 @@ class OrderActivityContainer extends Component {
       const {speech_listener} = this.state;
       speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
     }
+  
 
     findError = (error_code) => {
       switch (error_code) {
@@ -329,6 +329,7 @@ class OrderActivityContainer extends Component {
             order_price = {order.order_price}
             order_subtotal = {order.order_subtotal}
             order_qty = {order.order_qty}
+            order_category_id = {order.order_category_id}
             modifyOrderEntry = {modifyOrderEntry}
             deleteOrderEntry = {deleteOrderEntry}
             />

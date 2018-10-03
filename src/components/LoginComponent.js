@@ -33,7 +33,7 @@ export default function LoginComponent(props) {
             <Image
             style = {style.image} 
             source = {img} />
-
+            
              <Fumi
                 style={style.text_input}
                 label={'Waiter ID'}

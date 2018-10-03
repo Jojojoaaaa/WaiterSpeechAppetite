@@ -10,3 +10,4 @@ export const RETRIEVE_ORDERS = 'retrieveOrders.php'
 export const INSERT_ORDERS = 'insertOrders.php';
 export const INSERT_ORDERS_DETAIL = 'insertOrdersDetail.php';
 export const UPDATE_ORDERS_STATUS = 'updateOrdersStatus.php';
+export const RETRIEVE_CATEGORY_IMAGE = 'retrieveCategoryImage.php';

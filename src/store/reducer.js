@@ -21,7 +21,9 @@ const reducer = (state = initialState, action ) => {
             const orders_ready_count = action.orders_ready_count;  
             return {...state, orders_record: orders_record, 
                         orders_ready_count: orders_ready_count};
-
+        case actionTypes.SET_IP_ADDRESS:
+            const main_url = url.MAIN_URL_PREFIX + action.ip_address + url.MAIN_URL_SUFFIX;
+            return {...state, main_url: main_url};
         default: 
             return state;
     }
