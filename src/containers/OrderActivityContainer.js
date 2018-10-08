@@ -212,7 +212,7 @@ class OrderActivityContainer extends Component {
         }
       });
       const post_data = {orders : order_details};
-      axios.post(this.props.main_url + url.INSERT_ORDERS_DETAIL, post_data)
+      axios.post(this.props.main_url + url.INSERT_ORDER_ITEM, post_data)
         .then(response =>{
           console.log(response);
           Alert.alert('ORDER CONFIRMED');
