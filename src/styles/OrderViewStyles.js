@@ -24,13 +24,20 @@ export const customStyles = {
     currentStepLabelColor: '#fe7013'
 }
 export default  style = StyleSheet.create({
+    container: {
+        height: '100%'
+    },
     orders_container: {
-        height:'90%'
+        height:'80%'
     },
     order_entry: {
         borderColor: 'pink', 
         borderWidth:3,
         padding: 10,
         margin: 5
-    }
+    },
+    image_button: {
+        width: 20, 
+        height: 20
+    },
 });

@@ -31,33 +31,52 @@ class LoginContainer extends Component {
   }
 
   handleLogin = (btn) => {
+    console.log('clicku');
     let {waiter_id} = this.state;
     waiter_id = waiter_id.trim();
     const post_data = {waiter_id:waiter_id};
-    this.processLogin(post_data)
-      .then(res => {
-        console.log(res);
-        this.validateWaiter(res,btn)
+    try {
+      axios.post(this.props.main_url + url.LOGIN, post_data)
+      .then(response => {
+        console.log(response.data);
+        this.validateWaiter(response.data,btn)
       })
-      .catch(err => {
-        console.log(err);
-        Alert.alert(dialog.SERVER_ERROR);
-        
+      .catch(error => {
+        if (error.response.status === 404 ) {
+          Alert.alert(dialog.SERVER_ERROR);
+        }
+        console.log(error.response);
+        btn.reset()
       })
+    }
+    catch (error){
+      console.log(error);
+    }
+     
+    // this.processLogin(post_data)
+    //   .then(res => {
+    //     console.log(res);
+    //     this.validateWaiter(res,btn)
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     //Alert.alert(dialog.SERVER_ERROR);
+    //     btn.reset();
+    //   })
     
   }
   processLogin = (post_data) => {
     return (
-      axios.post(url.LOGIN, post_data)
+      axios.post(this.props.main_url + url.LOGIN, post_data)
       .then(response => response.data)
-      .catch(error => error.response)
+      .catch(error => error.message)
     )
   }
   validateWaiter = (result_json,btn) => {
     if (result_json.result>0){
       const {password, waiter_id} = this.state;
       if (password === result_json.password){
-        this.props.onLogin(waiter_id);
+        this.props.onLogin(waiter_id.trim());
         this.props.history.push(routes.HOME);
       }
       else {
@@ -90,13 +109,15 @@ class LoginContainer extends Component {
 
 mapStateToProps = state => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    main_url: state.main_url
   };
 };
 
 mapDispatchToProps = dispatch => {
   return {
-    onLogin: (waiter_id) => dispatch(actions.authorizeUser(waiter_id))
+    onLogin: (waiter_id) => dispatch(actions.authorizeUser(waiter_id)),
+    onSetIpAddress: (ip_address) => dispatch(actions.setIpAddress(ip_address))
   }
 }
 

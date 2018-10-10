@@ -14,7 +14,12 @@ import Btn from 'react-native-micro-animated-button';
 import {Fumi }  from 'react-native-textinput-effects';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-
+buttonStyles = {
+    marginTop: 50,
+    width:150,
+    backgroundColor: '#da8c75',
+    borderColor: 'transparent'   
+}
 
 export default function LoginComponent(props) {
     const { handleLogin,

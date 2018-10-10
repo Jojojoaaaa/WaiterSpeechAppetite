@@ -35,9 +35,9 @@ class OrderActivityContainer extends Component {
 
     componentWillMount() {
         this.initializeSpeechRecognizer();
-        // this.getAllMenu();
+        this.getAllMenu();
     }
-
+    
     initializeSpeechRecognizer = () => {
         SpeechRecognizer.createSpeechRecognizer()
             .then( speech_listener => {
@@ -110,7 +110,7 @@ class OrderActivityContainer extends Component {
                   order_price: res.price,
                   order_subtotal: res.price * qty,
                   order_qty: qty,
-                  order_category: res.category
+                  order_category_id: res.category_id
                 }
                 console.log(orders);
                 orders.push(order_detail);
@@ -166,7 +166,6 @@ class OrderActivityContainer extends Component {
           [
             {text: 'Confirm Order', onPress: () => this.processInsertingOrders()},
             {text: 'Modify Order'},
-            //{text: 'OK', onPress: () => console.log('OK Pressed')},
           ],
           { cancelable: false }
         )
@@ -188,7 +187,7 @@ class OrderActivityContainer extends Component {
     }
     insertOrders = () => {
       let post_data = {
-        status : 'PENDING',
+        status : method.PENDING,
         table_number : this.state.table_number,
         timestamp : moment().format('LLL'),
         total : this.state.total,
@@ -196,7 +195,7 @@ class OrderActivityContainer extends Component {
         order_type: this.props.location.order_type
       };
       return (
-        axios.post(url.INSERT_ORDERS, post_data)
+        axios.post(this.props.main_url + url.INSERT_ORDERS, post_data)
         .then(response => response.data)
         .catch(error => error.response)
       );
@@ -213,7 +212,7 @@ class OrderActivityContainer extends Component {
         }
       });
       const post_data = {orders : order_details};
-      axios.post(url.INSERT_ORDERS_DETAIL, post_data)
+      axios.post(this.props.main_url + url.INSERT_ORDER_ITEM, post_data)
         .then(response =>{
           console.log(response);
           Alert.alert('ORDER CONFIRMED');
@@ -254,11 +253,11 @@ class OrderActivityContainer extends Component {
       order = order.toUpperCase();
       const post_data = {order_name: order};
       return (
-         axios.post(url.RETRIEVE_ORDER_DETAIL, post_data)
+         axios.post(this.props.main_url + url.RETRIEVE_ORDER_DETAIL, post_data)
           .then(response =>  response.data)
         );
     }
-
+   
     goToHome = () => {
       Alert.alert(
         'Go to Home',
@@ -272,9 +271,9 @@ class OrderActivityContainer extends Component {
     }
 
     getAllMenu = () => {
-        axios.get(url.RETRIEVE_MENU)
+        axios.get(this.props.main_url + url.RETRIEVE_MENU)
         .then(response => {
-          const menu = response.data.map(m => m.Name);
+          const menu = response.data.map(m => m.Name.toUpperCase());
           this.setState({menu: menu});
         });
     }
@@ -283,6 +282,7 @@ class OrderActivityContainer extends Component {
       const {speech_listener} = this.state;
       speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
     }
+  
 
     findError = (error_code) => {
       switch (error_code) {
@@ -316,7 +316,6 @@ class OrderActivityContainer extends Component {
       } = this.state;
 
       const startSpeechListener = this.startSpeechListener;
-      const stopSpeechListener = this.stopSpeechListener;
       const modifyOrderEntry = this.modifyOrderEntry;
       const deleteOrderEntry = this.deleteOrderEntry;
       const goToHome = this.goToHome;
@@ -330,6 +329,7 @@ class OrderActivityContainer extends Component {
             order_price = {order.order_price}
             order_subtotal = {order.order_subtotal}
             order_qty = {order.order_qty}
+            order_category_id = {order.order_category_id}
             modifyOrderEntry = {modifyOrderEntry}
             deleteOrderEntry = {deleteOrderEntry}
             />
@@ -342,7 +342,6 @@ class OrderActivityContainer extends Component {
             table_number = {table_number}
             total = {total}
             startSpeechListener = {startSpeechListener}
-            stopSpeechListener = {stopSpeechListener}
             goToHome = {goToHome}>
             {order_list_display}
           </OrderActivityComponent>
@@ -353,7 +352,8 @@ class OrderActivityContainer extends Component {
 mapStateToProps = state => {
   return {
     auth: state.auth,
-    waiter_id: state.waiter_id
+    waiter_id: state.waiter_id,
+    main_url: state.main_url
   };
 };
 

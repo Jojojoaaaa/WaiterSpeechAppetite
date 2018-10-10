@@ -1,13 +1,14 @@
 import React from 'react';
 import Swipeout from 'react-native-swipeout';
 
+import CatImage from '../containers/CategoryImageContainer';
+
 import * as method from '../constants/type';
 
 import style from '../styles/OrderActivityStyles';
 
 import add from '../assets/add.png';
 import sub from '../assets/minus.png';
-import cat from '../assets/cat.png';
 import mic from '../assets/mic.png';
 
 import {
@@ -21,14 +22,12 @@ import {
 export function OrderEntry(props) {
     const {
         order_name, 
-        order_category, 
+        order_category_id, 
         order_price, 
         order_subtotal, 
         order_qty,
         modifyOrderEntry,
         deleteOrderEntry } = props;
-    //conditional render on image
-    //const image source={require('/react-native/img/favicon.png')}
     var swipeoutBtns = [
         {
           text: 'Delete',
@@ -42,9 +41,10 @@ export function OrderEntry(props) {
             backgroundColor={'transparent'}
             autoClose={true}>
             <View>
-                <Image
-                    style={style.category_image}
-                    source={cat}/>
+                <CatImage
+                    category_id = {order_category_id}
+                    style ={style.category_image}/>
+               
                 <Text>{order_name}</Text>
                 <Text>{order_price} Php</Text>
                 <Text>{order_subtotal} Php</Text>

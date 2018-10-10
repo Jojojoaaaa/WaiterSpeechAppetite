@@ -40,6 +40,9 @@ class HomeContainer extends Component {
   componentDidMount() {
    console.log(this.props);
   }
+  componentWillUnmount() {
+    clearInterval(this.update);
+  }
   initializeSpeechRecognizer = () => {
     SpeechRecognizer.createSpeechRecognizer()
         .then( speech_listener => {
@@ -108,7 +111,7 @@ class HomeContainer extends Component {
   }
   getAllOrdersRecord = () => {
     const post_data = {waiter_id: this.props.waiter_id}
-      axios.post(url.RETRIEVE_ORDERS, post_data)
+      axios.post(this.props.main_url + url.RETRIEVE_ORDERS, post_data)
         .then(response => {
             const orders_record = response.data;
             let orders_ready_count = 0;
@@ -117,7 +120,10 @@ class HomeContainer extends Component {
             });
             this.props.onSetOrders(orders_record, orders_ready_count);
         })
+    this.update = setTimeout(this.getAllOrdersRecord, 2000);
   }
+
+
   speechHandler = () => {
     const {speech_listener} = this.state;
     speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
@@ -150,7 +156,8 @@ mapStateToProps = state => {
     auth: state.auth,
     waiter_id: state.waiter_id,
     orders_ready_count: state.orders_ready_count,
-    orders_record: state.orders_record
+    orders_record: state.orders_record,
+    main_url: state.main_url
   };
 };
 mapDispatchToProps = dispatch => {
