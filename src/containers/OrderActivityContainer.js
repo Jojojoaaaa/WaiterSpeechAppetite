@@ -187,7 +187,7 @@ class OrderActivityContainer extends Component {
     }
     insertOrders = () => {
       let post_data = {
-        status : 'PENDING',
+        status : method.PENDING,
         table_number : this.state.table_number,
         timestamp : moment().format('LLL'),
         total : this.state.total,
