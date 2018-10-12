@@ -59,13 +59,15 @@ export default function LoginComponent(props) {
 
             </View>
             <View style={style.viewStyleThree}>
-            <Btn
-                     style={buttonStyles}
-                     label="Login"
-                     onPress={() => handleLogin(this.btn)}
-                     ref={ref => (this.btn = ref)}
-                     foregroundColor={'white'}
-                     />
+            <TouchableOpacity onPress = {() => handleLogin(this.btn)}>            
+                <Btn
+                        style={buttonStyles}
+                        label="Login"
+                        onPress={() => handleLogin(this.btn)}
+                        ref={ref => (this.btn = ref)}
+                        foregroundColor={'white'}
+                        />
+            </TouchableOpacity>
             <Btn
                      style={buttonStyles}
                      label="Show Modal"

@@ -2,8 +2,7 @@ import React, {Component}from 'react';
 import {
     SpeechRecognizer,
     RecognizerIntent,
-    RecognitionListener
-  } from 'react-native-android-speech-recognizer';
+} from 'react-native-android-speech-recognizer';
 
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -13,6 +12,8 @@ import axios from '../axios';
 import {View, Alert, Text} from 'react-native';
 
 import OrderActivityComponent , {OrderEntry} from '../components/OrderActivityComponent';
+import ErrorPromptComponent from '../components/ErrorPromptComponent';
+
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
 import * as url from '../constants/urls';
@@ -20,7 +21,6 @@ import * as method from '../constants/type';
 import * as routes from '../constants/routes';
 
 
-//let moment = require()
 class OrderActivityContainer extends Component {
     constructor(props){
       super(props);
@@ -30,6 +30,8 @@ class OrderActivityContainer extends Component {
         orders: [],
         total: 0,
         menu: [],
+        hasError: false,
+        errorMessage: ''
       }
     }
 
@@ -43,8 +45,7 @@ class OrderActivityContainer extends Component {
             .then( speech_listener => {
                 speech_listener.setRecognitionListener({
                     onError: event => {
-                        console.log(event.error);
-                        Alert.alert(dialog.SR_FAILED + this.findError(event.error));
+                      this.setError(dialog.SR_FAILED + this.findError(event.error));
                     },
                     onResults: event => {
                         var speech_results = event.results[SpeechRecognizer.RESULTS_RECOGNITION];
@@ -75,7 +76,7 @@ class OrderActivityContainer extends Component {
       })
 
       if (!command_recognized) {
-        Alert.alert(dialog.SPEECH_COMMAND_404);
+        this.setError(dialog.SPEECH_COMMAND_404);
       }
     }
 
@@ -118,19 +119,19 @@ class OrderActivityContainer extends Component {
                 this.setTotal();
               }
               else {
-                Alert.alert(dialog.NOT_ENOUGH_SERVINGS);
+                this.setError(dialog.NOT_ENOUGH_SERVINGS);
               }
             })
             return _break;
           }
           else {
             if (last_index === i) {
-              Alert.alert(dialog.ORDER_DOES_NOT_EXIST);
+              this.setError(dialog.ORDER_DOES_NOT_EXIST);
             }
           }
         }
         else {
-          Alert.alert(dialog.ORDER_DUPLICATE);
+          this.setError(dialog.ORDER_DUPLICATE);
           return _break;
         }
       });
@@ -154,10 +155,10 @@ class OrderActivityContainer extends Component {
     confirmOrder = () => {
       const {table_number, orders} = this.state;
       if (table_number === '') {
-        Alert.alert(dialog.NO_TABLE_NUMBER);
+        this.setError(dialog.NO_TABLE_NUMBER);
       }
       else if (orders.length === 0) {
-        Alert.alert(dialog.NO_ORDER_ENTRY)
+        this.setError(dialog.NO_ORDER_ENTRY);
       }
       else {
         Alert.alert(
@@ -181,7 +182,7 @@ class OrderActivityContainer extends Component {
               this.insertOrderDetail(order_id);
             }
             else {
-              Alert.alert('Something went wrong');
+              this.setError(dialog.SOMETHING_WENT_WRONG);
             }
           })
     }
@@ -217,7 +218,6 @@ class OrderActivityContainer extends Component {
           console.log(response);
           Alert.alert('ORDER CONFIRMED');
           this.props.history.push(routes.HOME);
-          //console.log(response);
         })
         .catch(error => console.log(error));
     }
@@ -283,6 +283,16 @@ class OrderActivityContainer extends Component {
       speech_listener.startListening(RecognizerIntent.ACTION_RECOGNIZE_SPEECH, {});
     }
   
+    setError = (message) => {
+      this.setState({
+        hasError: true,
+        errorMessage: message});
+    }
+    handleError = () => {
+      this.setState({
+        hasError: false,
+        errorMessage: "" })
+    }
 
     findError = (error_code) => {
       switch (error_code) {
@@ -312,14 +322,16 @@ class OrderActivityContainer extends Component {
       const {
         orders,
         table_number,
-        total
+        total,
+        hasError,
+        errorMessage
       } = this.state;
 
       const startSpeechListener = this.startSpeechListener;
       const modifyOrderEntry = this.modifyOrderEntry;
       const deleteOrderEntry = this.deleteOrderEntry;
       const goToHome = this.goToHome;
-
+      const handleError = this.handleError;
       let order_list_display = (
         orders.map(order => {
           return (
@@ -344,6 +356,10 @@ class OrderActivityContainer extends Component {
             startSpeechListener = {startSpeechListener}
             goToHome = {goToHome}>
             {order_list_display}
+            <ErrorPromptComponent
+                hasError = {hasError}
+                errorMessage = {errorMessage}
+                handleError = {handleError}/>
           </OrderActivityComponent>
         </View>    
       )

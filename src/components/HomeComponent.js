@@ -38,6 +38,7 @@ export default function HomeComponent(props) {
                     style={style.bell}
                     source={sub}/>
             </TouchableNativeFeedback>
+            {props.children}
         </View>
     )
 }

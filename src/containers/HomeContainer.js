@@ -11,6 +11,8 @@ import axios from '../axios';
 import {View, Alert, Text} from 'react-native';
 
 import HomeComponent from '../components/HomeComponent';
+import ErrorPromptComponent from '../components/ErrorPromptComponent';
+
 import * as  commands from '../constants/speech_commands';
 import * as  routes from '../constants/routes';
 import * as  url from '../constants/urls';
@@ -24,7 +26,9 @@ class HomeContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      speech_listener: ''
+      speech_listener: '',
+      hasError: false,
+      errorMessage: ''
     }
   }
 
@@ -48,7 +52,8 @@ class HomeContainer extends Component {
         .then( speech_listener => {
             speech_listener.setRecognitionListener({
                 onError: event => {
-                    Alert.alert(dialog.SR_FAILED + this.findError(event.error));
+                    this.setError(dialog.SR_FAILED + this.findError(event.error));
+                    //Alert.alert(dialog.SR_FAILED + this.findError(event.error));
                 },
                 onResults: event => {
                     var speech_results = event.results[SpeechRecognizer.RESULTS_RECOGNITION];
@@ -78,7 +83,8 @@ class HomeContainer extends Component {
       )
     }
     else {
-      Alert.alert(dialog.SPEECH_COMMAND_404);
+      this.setError(dialog.SPEECH_COMMAND_404)
+      //Alert.alert(dialog.SPEECH_COMMAND_404);
     }
   }
   startCreatingOrders = (order_type) => {
@@ -136,7 +142,19 @@ class HomeContainer extends Component {
     this.props.onLogout();
     this.props.history.push(routes.LOGIN);
   }
+  setError = (message) => {
+    this.setState({
+      hasError: true,
+      errorMessage: message});
+  }
+  handleError = () => {
+    this.setState({
+      hasError: false,
+      errorMessage: "" })
+  }
   render() {
+    const {hasError, errorMessage} = this.state;
+    const handleError = this.handleError;
     const speechHandler = this.speechHandler;
     const viewOrders = this.viewOrders;
     const logOutHandler = this.logOutHandler;
@@ -146,7 +164,12 @@ class HomeContainer extends Component {
               speechHandler={speechHandler}
               viewOrders={viewOrders}
               logOutHandler={logOutHandler}
-              orders_ready_count={orders_ready_count} />
+              orders_ready_count={orders_ready_count}>
+             <ErrorPromptComponent
+                hasError = {hasError}
+                errorMessage = {errorMessage}
+                handleError = {handleError}/>
+          </HomeComponent>
       )
   }
 }
