@@ -20,10 +20,10 @@ class CategoryImageContainer extends Component {
     
     getCategoryImage = () => {
         const post_data = {category_id: this.props.category_id};
-        axios.post(this.props.main_url + url.RETRIEVE_CATEGORY_IMAGE,post_data, {responseType: 'blob'})
+        axios.post(this.props.main_url + url.RETRIEVE_CATEGORY_IMAGE,post_data)
           .then(response => {
-            const blob = response.data;
-            this.setState({image: blob});
+            const image = response.data;
+            this.setState({image: image});
           })
       }
     render() {

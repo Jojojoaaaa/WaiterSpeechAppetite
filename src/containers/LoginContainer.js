@@ -6,6 +6,8 @@ import axios from '../axios';
 import {Alert} from 'react-native';
 
 import LoginComponent from '../components/LoginComponent';
+import ErrorPromptComponent from '../components/ErrorPromptComponent';
+
 import * as  actions from '../store/actions';
 import * as url from '../constants/urls';
 import * as routes from '../constants/routes';
@@ -17,7 +19,9 @@ class LoginContainer extends Component {
     this.state = {
       waiter_id: "",
       password: "",
-      modalVisible: false
+      modalVisible: false,
+      hasError: false,
+      errorMessage: "",
     }
   }
 
@@ -29,7 +33,17 @@ class LoginContainer extends Component {
   closeModal = () => {
     this.setState({modalVisible:false});
   }
-
+  setError = (message) => {
+    btn.reset();
+    this.setState({
+      hasError: true,
+      errorMessage: message});
+  }
+  handleError = () => {
+    this.setState({
+      hasError: false,
+      errorMessage: "" })
+  }
   handleLogin = (btn) => {
     console.log('clicku');
     let {waiter_id} = this.state;
@@ -43,7 +57,7 @@ class LoginContainer extends Component {
       })
       .catch(error => {
         if (error.response.status === 404 ) {
-          Alert.alert(dialog.SERVER_ERROR);
+          this.setError(dialog.SERVER_ERROR);
         }
         console.log(error.response);
         btn.reset()
@@ -52,17 +66,6 @@ class LoginContainer extends Component {
     catch (error){
       console.log(error);
     }
-     
-    // this.processLogin(post_data)
-    //   .then(res => {
-    //     console.log(res);
-    //     this.validateWaiter(res,btn)
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     //Alert.alert(dialog.SERVER_ERROR);
-    //     btn.reset();
-    //   })
     
   }
   processLogin = (post_data) => {
@@ -73,6 +76,7 @@ class LoginContainer extends Component {
     )
   }
   validateWaiter = (result_json,btn) => {
+    btn.reset();
     if (result_json.result>0){
       const {password, waiter_id} = this.state;
       if (password === result_json.password){
@@ -80,14 +84,11 @@ class LoginContainer extends Component {
         this.props.history.push(routes.HOME);
       }
       else {
-        Alert.alert(dialog.INCORRECT_PASSWORD);
-        btn.reset();
-      
+        this.setError(dialog.INCORRECT_PASSWORD);
       }
     }
     else {
-      Alert.alert(dialog.NO_WAITER_ID);
-      btn.reset();
+      this.setError(dialog.NO_WAITER_ID);
     }
   }
   handleChange = (name, value) => {
@@ -95,14 +96,25 @@ class LoginContainer extends Component {
   }
 
   render() {
+    const {modalVisible, hasError, errorMessage} = this.state;
+
+    const handleLogin = this.handleLogin;
+    const handleChange = this.handleChange;
+    const openModal = this.openModal;
+    const closeModal = this.closeModal;
+    const handleError = this.handleError;
     return (
       <LoginComponent
-        handleLogin = {this.handleLogin}
-        handleChange = {this.handleChange}
-        modalVisible = {this.state.modalVisible}
-        openModal = {this.openModal}
-        closeModal = {this.closeModal}
-        />
+        handleLogin = {handleLogin}
+        handleChange = {handleChange}
+        modalVisible = {modalVisible}
+        openModal = {openModal}
+        closeModal = {closeModal}>
+        <ErrorPromptComponent
+          hasError = {hasError}
+          errorMessage = {errorMessage}
+          handleError = {handleError} />
+      </LoginComponent>
     );
   }
 }

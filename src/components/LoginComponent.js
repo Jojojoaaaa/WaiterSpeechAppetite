@@ -8,14 +8,12 @@ import {
     } from 'react-native';
 import style from '../styles/LoginStyles';
 import img from '../assets/SAI.png';
-import warning from '../assets/modal/Warning.png';
-import tryagain from '../assets/modal/btnTryAgain.png';
 import Btn from 'react-native-micro-animated-button';
 import {Fumi }  from 'react-native-textinput-effects';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 buttonStyles = {
-    marginTop: 50,
+    marginTop: 5,
     width:150,
     backgroundColor: '#da8c75',
     borderColor: 'transparent'   
@@ -62,14 +60,14 @@ export default function LoginComponent(props) {
             </View>
             <View style={style.viewStyleThree}>
             <Btn
-                     style={style.button}
+                     style={buttonStyles}
                      label="Login"
                      onPress={() => handleLogin(this.btn)}
                      ref={ref => (this.btn = ref)}
                      foregroundColor={'white'}
                      />
             <Btn
-                     style={style.button}
+                     style={buttonStyles}
                      label="Show Modal"
                      onPress={() => openModal(this.btn)}
                      ref={ref => (this.btn = ref)}
@@ -77,30 +75,8 @@ export default function LoginComponent(props) {
                      />
 
             </View>
-
-            <Modal
-                 visible={modalVisible}
-                 animationType={'fade'}
-                 onRequestClose={() => closeModal()}
-                 transparent={true}
-                 >
-                 <View style={style.modalContent}>
-                 
-                    <View style={style.innerContainer}>
-                    <Image style={style.imagewarning}
-                        source = {warning}>
-                    </Image>
-                    
-                    <Text style={style.textStyle}>Waiter ID does not exist!</Text>
-                     <TouchableOpacity onPress={() => {closeModal();}}>
-                        <Image
-                        style={style.buttonModal}
-                            source={tryagain}
-                        />
-                     </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
+            {/* in conflict, choose mae's */}
+            {props.children}
         </View>
     </View>
     );
