@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 import * as url from '../constants/urls';
 const initialState = {
-    auth: false,
+    auth: true,
     waiter_id: '',
     orders_record: [],
     orders_ready_count: 0,

@@ -21,9 +21,8 @@ class LoginContainer extends Component {
     }
   }
 
-  openModal = (btn) => {
+  openModal = () => {
     this.setState({modalVisible:true});
-    btn.reset();
   }
 
   closeModal = () => {
@@ -53,16 +52,6 @@ class LoginContainer extends Component {
       console.log(error);
     }
      
-    // this.processLogin(post_data)
-    //   .then(res => {
-    //     console.log(res);
-    //     this.validateWaiter(res,btn)
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     //Alert.alert(dialog.SERVER_ERROR);
-    //     btn.reset();
-    //   })
     
   }
   processLogin = (post_data) => {
