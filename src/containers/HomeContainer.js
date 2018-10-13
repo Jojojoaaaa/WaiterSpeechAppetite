@@ -24,8 +24,17 @@ class HomeContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      speech_listener: ''
+      speech_listener: '',
+      modalVisible: false
     }
+  }
+
+  openModal = () => {
+    this.setState({modalVisible:true});
+  }
+
+  closeModal = () => {
+    this.setState({modalVisible:false});
   }
 
   componentWillMount () {
@@ -75,7 +84,7 @@ class HomeContainer extends Component {
           {text: 'Take Out', onPress: () => this.startCreatingOrders(type.TAKE_OUT)},
         ],
         { cancelable: true }
-      )
+      ) // to be changed to modal
     }
     else {
       Alert.alert(dialog.SPEECH_COMMAND_404);
@@ -146,7 +155,10 @@ class HomeContainer extends Component {
               speechHandler={speechHandler}
               viewOrders={viewOrders}
               logOutHandler={logOutHandler}
-              orders_ready_count={orders_ready_count} />
+              orders_ready_count={orders_ready_count}
+              modalVisible = {this.state.modalVisible}
+              openModal = {this.openModal}
+              closeModal = {this.closeModal} />
       )
   }
 }

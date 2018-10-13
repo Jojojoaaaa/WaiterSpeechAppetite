@@ -1,5 +1,5 @@
 //192.168.43.193 if hotspot
-export const MAIN_URL = 'http://192.168.43.109/android_queries/';
+export const MAIN_URL = 'http://192.168.1.4/android_queries/';
 export const MAIN_URL_PREFIX = 'http://';
 export const MAIN_URL_SUFFIX = '/android_queries/';
 

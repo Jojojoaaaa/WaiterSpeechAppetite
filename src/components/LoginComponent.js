@@ -9,7 +9,7 @@ import {
     } from 'react-native';
 import style from '../styles/LoginStyles';
 import img from '../assets/login/Waiter.png';
-import settings from '../assets/add.png';
+import settings from '../assets/login/settings.png';
 import warning from '../assets/modal/Settings.png';
 import tryagain from '../assets/modal/btnChange.png';
 import Btn from 'react-native-micro-animated-button';
@@ -81,13 +81,6 @@ export default function LoginComponent(props) {
                         ref={ref => (this.btn = ref)}
                         foregroundColor={'white'}
                         />
-                {/* <Btn
-                        style={buttonStyles}
-                        label="Show Modal"
-                        onPress={() => openModal(this.btn)}
-                        ref={ref => (this.btn = ref)}
-                        foregroundColor={'white'}
-                        /> */}
 
                 </View>
                 

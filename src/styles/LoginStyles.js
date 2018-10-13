@@ -61,10 +61,8 @@ export default  style = StyleSheet.create({
     },
 
     buttonSettings:{
-        marginTop: 10,
-        marginRight: 10,
-        height: 30,
-        width: 30,
+        marginTop: 20,
+        marginRight: 20,
 
 
     },
@@ -73,11 +71,10 @@ export default  style = StyleSheet.create({
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'rgba(0,0,0,0.5)'
+        backgroundColor:'rgba(0,0,0,0.75)'
       },
 
     innerContainer:{
-
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#F9F9F9',
