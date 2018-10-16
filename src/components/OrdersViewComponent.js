@@ -10,7 +10,9 @@ import Swipeout from 'react-native-swipeout';
 import StepIndicator from 'react-native-step-indicator';
 import BottomNavigation, { FullTab } from 'react-native-material-bottom-navigation';
 
-import add from '../assets/add.png';
+import back from '../assets/orderview/btnBack.png';
+import header from '../assets/orderview/header.png';
+import entry from '../assets/orderview/order-list.png';
 
 import * as status from '../constants/type';
 
@@ -38,16 +40,16 @@ export function OrdersEntry(props) {
       ]
 
     let orders_entry = (    
-        <View style = {styles.order_entry}>     
-            <Text>Table Number: {table_number}</Text>
-            <Text>Order ID: {order_id}</Text>
+        <View style = {styles.order_entry}> 
+            <Text style={{marginBottom:5}}>Table Number: {table_number}</Text>
+            <Text style={{marginBottom:15}}>Order ID: {order_id}</Text>
             <StepIndicator
                 customStyles={customStyles}
                 currentPosition={pos}
                 labels={labels}
                 stepCount={count}
             />
-        </View>  
+            </View>  
     )
     return (
         (status.READY_CHECK.test(order_status)) 
@@ -73,37 +75,37 @@ export default function OrdersViewComponent(props) {
             key: status.READY,
             icon: 'gamepad-variant',
             label: status.READY,
-            barColor: '#388E3C',
-            pressColor: 'rgba(255, 255, 255, 0.16)'
-        },
-        {
-            key: status.SERVED,
-            icon: 'movie',
-            label: status.SERVED,
-            barColor: '#B71C1C',
-            pressColor: 'rgba(255, 255, 255, 0.16)'
-        },
-        {
-            key: status.PAID,
-            icon: 'music-note',
-            label: status.PAID,
-            barColor: '#E64A19',
+            barColor: '#DA8C75',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
             key: status.PENDING,
             icon: 'movie',
             label: status.PENDING,
-            barColor: '#B71C1C',
+            barColor: '#C05B5A',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
             key: status.ALL,
             icon: 'movie',
             label: status.ALL,
-            barColor: '#B71C1C',
+            barColor: '#4F4F4F',
             pressColor: 'rgba(255, 255, 255, 0.16)'
-        }
+        },
+        {
+            key: status.SERVED,
+            icon: 'movie',
+            label: status.SERVED,
+            barColor: '#EDC589',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+            key: status.PAID,
+            icon: 'music-note',
+            label: status.PAID,
+            barColor: '#84BD93',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        }   
     ]
     
     renderIcon = icon => ({ isActive }) => (
@@ -120,22 +122,28 @@ export default function OrdersViewComponent(props) {
         />
     )
     return (
-        <View
-            style={styles.container}>
-            <TouchableNativeFeedback
-                    onPress={() => goToHome()}>
-                <Image
-                style={styles.image_button}
-                source={add}/>
-            </TouchableNativeFeedback>
-            <ScrollView style={styles.orders_container}>
-                {props.children}
-            </ScrollView>
-            <BottomNavigation
-            onTabPress={active_tab => changeTab(active_tab.key)}
-            renderTab={renderTab}
-            tabs={tabs}
-            />
+        <View style={styles.container}>
+            <View style={styles.body}>
+                <Image 
+                    style={style.bg}
+                    source={header}></Image>
+                <TouchableNativeFeedback
+                            onPress={() => goToHome()}>
+                        <Image
+                        style={styles.image_button}
+                        source={back}/>
+                    </TouchableNativeFeedback>
+                <View style={styles.boxOne}>
+                    <ScrollView style={styles.orders_container}>
+                        {props.children}
+                    </ScrollView>
+                </View>
+                    <BottomNavigation
+                    onTabPress={active_tab => changeTab(active_tab.key)}
+                    renderTab={renderTab}
+                    tabs={tabs}
+                    />     
+            </View>
         </View>
       )
 }
