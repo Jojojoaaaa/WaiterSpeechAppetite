@@ -32,18 +32,23 @@ export default  style = StyleSheet.create({
     },
     boxOne:{
         flex:1,
-        marginTop: 50,
+        marginTop: 30,
         alignItems: 'center'
     },
     orders_container: {
-        height:'80%'
+        height:'80%',
+        backgroundColor: '#F3F3F3'
     },
-    order_entry: {
+    order_entry:{
+        height: 150,
+        marginBottom: 20,
+
+    },
+    entry: {
         backgroundColor: 'white',
         width: 375,
         height: 140,
         padding: 10,
-        margin: 5,
         borderRadius: 3,  
     },
     image_button: {
@@ -54,5 +59,41 @@ export default  style = StyleSheet.create({
         position: 'absolute',
         width: '100%',
         height: '100%',
+    },
+
+    modalContent:{
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'rgba(0,0,0,0.75)'
+      },
+
+    innerContainer:{
+        alignItems: 'center',
+        backgroundColor: '#FFF8F3',
+        borderRadius: 5,
+        paddingBottom: 50,
+        height: 250, //no height
+        width:325, //250 for error
+        marginRight: 50,
+        marginLeft: 50
+    },
+
+    textModal:{
+        fontFamily: 'Roboto',
+        fontSize: 16,
+        color: '#333333'
+    },
+
+
+    imagewarning:{
+        marginBottom:20,
+    },
+
+    buttonModal:{
+        marginTop: 30,
+        width:160,
+        height: 32
+
     },
 });

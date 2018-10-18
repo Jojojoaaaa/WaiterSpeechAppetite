@@ -4,7 +4,9 @@ import {
     Text,
     ScrollView,
     TouchableNativeFeedback,
-    Image
+    Image,
+    TouchableOpacity,
+    Modal
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import StepIndicator from 'react-native-step-indicator';
@@ -13,6 +15,10 @@ import BottomNavigation, { FullTab } from 'react-native-material-bottom-navigati
 import back from '../assets/orderview/btnBack.png';
 import header from '../assets/orderview/header.png';
 import entry from '../assets/orderview/order-list.png';
+import close from '../assets/orderview/btnClose.png';
+import out from '../assets/home/btnOut.png';
+import type from '../assets/login/settings.png';
+import illus from '../assets/orderview/Confirm.png';
 
 import * as status from '../constants/type';
 
@@ -34,22 +40,28 @@ export function OrdersEntry(props) {
     var swipeoutBtns = [
         {
           text: 'Serve',
-          backgroundColor: 'green',
+          backgroundColor: '#4B9051',
           onPress: () => {updateOrdersStatus(order_id, status.SERVED)}
         }
       ]
 
     let orders_entry = (    
         <View style = {styles.order_entry}> 
-            <Text style={{marginBottom:5}}>Table Number: {table_number}</Text>
-            <Text style={{marginBottom:15}}>Order ID: {order_id}</Text>
-            <StepIndicator
-                customStyles={customStyles}
-                currentPosition={pos}
-                labels={labels}
-                stepCount={count}
-            />
-            </View>  
+            
+            <View style = {styles.entry}>
+                <Text style={{marginBottom:5}}>Table Number: {table_number}</Text>
+                <Text style={{marginBottom:15}}>Order ID: {order_id}</Text>
+                <StepIndicator
+                    customStyles={customStyles}
+                    currentPosition={pos}
+                    labels={labels}
+                    stepCount={count}
+                />
+            </View>
+            <View style={{height:20, alignItems:'flex-end'}}>
+                <Text>Swipe right to serve >>   </Text>
+            </View>          
+        </View>  
     )
     return (
         (status.READY_CHECK.test(order_status)) 
@@ -57,7 +69,8 @@ export function OrdersEntry(props) {
         <Swipeout
             left={swipeoutBtns} 
             backgroundColor={'transparent'}
-            autoClose={true}> 
+            autoClose={true}
+            style={{height:140, marginBottom:8}}> 
             {orders_entry}
         </Swipeout>
         : 
@@ -67,8 +80,10 @@ export function OrdersEntry(props) {
 export default function OrdersViewComponent(props) {
     const{
         changeTab,
-        goToHome
-        } = props;
+        goToHome,
+        modalVisible,
+        openModal,
+        closeModal} = props;
 
     const tabs = [
         {
@@ -127,12 +142,18 @@ export default function OrdersViewComponent(props) {
                 <Image 
                     style={style.bg}
                     source={header}></Image>
-                <TouchableNativeFeedback
-                            onPress={() => goToHome()}>
-                        <Image
-                        style={styles.image_button}
-                        source={back}/>
-                    </TouchableNativeFeedback>
+                <TouchableNativeFeedback onPress={() => goToHome()}>
+                    <Image
+                    style={styles.image_button}
+                    source={back}/>
+                </TouchableNativeFeedback>
+                <TouchableOpacity
+                    onPress={() => openModal()}>
+                    <Image
+                        style={{marginLeft: 15}}
+                        source={type}>
+                    </Image>
+                </TouchableOpacity>
                 <View style={styles.boxOne}>
                     <ScrollView style={styles.orders_container}>
                         {props.children}
@@ -142,7 +163,32 @@ export default function OrdersViewComponent(props) {
                     onTabPress={active_tab => changeTab(active_tab.key)}
                     renderTab={renderTab}
                     tabs={tabs}
-                    />     
+                    /> 
+
+                <Modal
+                    visible={modalVisible}
+                    animationType={'fade'}
+                    onRequestClose={() => closeModal()}
+                    transparent={true}
+                    >
+                    <View style={style.modalContent}>
+                        <View style={style.innerContainer}>
+                            <Image style={style.imagewarning}
+                                source = {illus}>
+                            </Image>
+                            
+                            <Text style={style.textModal}>The order has been served.</Text>
+                            
+                            <TouchableOpacity onPress={() => {closeModal();}}>
+                                <Image
+                                style={style.buttonModal}
+                                    source={close}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+    
             </View>
         </View>
       )

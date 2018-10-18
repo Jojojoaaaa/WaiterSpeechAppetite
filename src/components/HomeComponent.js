@@ -44,8 +44,7 @@ export default function HomeComponent(props) {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => openModal()}
-                        >
+                        onPress={() => openModal()}>
                         <Image
                             source={type}>
                         </Image>
