@@ -21,9 +21,19 @@ class OrdersViewContainer extends Component {
            orders_served: [],
            orders_paid: [],
            current_orders_view: [],
-           active_tab: status.READY
+           active_tab: status.READY,
+           modalVisible: false
         };
     }
+
+    openModal = () => {
+        this.setState({modalVisible:true});
+    }
+    
+    closeModal = () => {
+        this.setState({modalVisible:false});
+    }
+
     componentWillMount() {
         this.groupOrders();
     }
@@ -155,13 +165,17 @@ class OrdersViewContainer extends Component {
                     order_id = {order.order_id}
                     order_status = {order.status}
                     updateOrdersStatus = {updateOrdersStatus}
+                    
                 />
             )
         });
         return(
             <OrdersViewComponent
                 changeTab={changeTab}
-                goToHome={goToHome}>
+                goToHome={goToHome}
+                modalVisible = {this.state.modalVisible}
+                openModal = {this.openModal}
+                closeModal = {this.closeModal}>
             {orders_view}
             </OrdersViewComponent>
         )

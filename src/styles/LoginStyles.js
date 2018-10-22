@@ -2,35 +2,45 @@ import {StyleSheet} from 'react-native';
 
 export default  style = StyleSheet.create({
     container: { 
+        height: '100%'
+    },
 
+    body: {
+        flex:1,
+        //backgroundColor: 'green',
     },
 
     viewStyleOne: {
-        marginTop: 100,
-        justifyContent: 'center',
-        alignItems:'center', 
-        marginBottom:75
+        //backgroundColor: 'red',
+        flex: 0.5,
+        justifyContent: 'flex-start',
+        alignItems:'flex-end', 
     },
 
-    viewStyleTwo:{
+    viewStyleTwo: {
+        //backgroundColor: 'red',
+        flex: 3.5,
         justifyContent: 'center',
         alignItems:'center', 
-        marginBottom:50
     },
+
 
     viewStyleThree:{
+        //backgroundColor: 'orange',
+        flex: 2,
         justifyContent: 'center',
         alignItems:'center', 
+        marginTop: 15
     },
 
-
-    image: {
-        width: 200,
-        height: 200
+    viewStyleFour:{
+        //backgroundColor: 'yellow',
+        flex: 1.5,
+        alignItems:'center', 
     },
 
     imagewarning:{
-        marginBottom:30
+        marginBottom:50
     },
 
     textStyle:{
@@ -39,15 +49,8 @@ export default  style = StyleSheet.create({
 
     text_input: {
         width: 250, 
-        height: 70,
+        height: 68,
         marginBottom: 15
-    },
-
-    button:{
-        marginTop: 10,
-        width:150,
-        backgroundColor: '#da8c75',
-        borderColor: 'transparent'   
     },
 
     buttonModal:{
@@ -57,20 +60,28 @@ export default  style = StyleSheet.create({
 
     },
 
+    buttonSettings:{
+        marginTop: 20,
+        marginRight: 20,
+
+
+    },
+
     modalContent:{
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'rgba(0,0,0,0.5)'
+        backgroundColor:'rgba(0,0,0,0.75)'
       },
 
     innerContainer:{
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#F9F9F9',
         borderRadius: 5,
         paddingBottom: 50,
-        width:250,
+        height: 500, //no height
+        width:350, //250 for error
         marginRight: 50,
         marginLeft: 50
     }

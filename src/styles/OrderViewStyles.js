@@ -1,43 +1,99 @@
 import {StyleSheet} from 'react-native';
 
 export const customStyles = {
-    stepIndicatorSize: 25,
-    currentStepIndicatorSize:30,
-    separatorStrokeWidth: 2,
+    stepIndicatorSize: 30,
+    currentStepIndicatorSize:35,
+    separatorStrokeWidth: 4,
     currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: '#fe7013',
+    stepStrokeCurrentColor: '#da8c75',
     stepStrokeWidth: 3,
-    stepStrokeFinishedColor: '#fe7013',
-    stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#fe7013',
-    separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: '#fe7013',
+    stepStrokeFinishedColor: '#da8c75',
+    stepStrokeUnFinishedColor: '#d7d7d7', 
+    separatorFinishedColor: '#da8c75',
+    separatorUnFinishedColor: '#d7d7d7', 
+    stepIndicatorFinishedColor: '#da8c75',
     stepIndicatorUnFinishedColor: '#ffffff',
     stepIndicatorCurrentColor: '#ffffff',
     stepIndicatorLabelFontSize: 13,
     currentStepIndicatorLabelFontSize: 13,
-    stepIndicatorLabelCurrentColor: '#fe7013',
+    stepIndicatorLabelCurrentColor: '#da8c75',
     stepIndicatorLabelFinishedColor: '#ffffff',
-    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    stepIndicatorLabelUnFinishedColor: '#d7d7d7',
     labelColor: '#999999',
     labelSize: 13,
-    currentStepLabelColor: '#fe7013'
+    currentStepLabelColor: '#da8c75'
 }
 export default  style = StyleSheet.create({
     container: {
         height: '100%'
     },
-    orders_container: {
-        height:'80%'
+    body:{
+        flex:1
     },
-    order_entry: {
-        borderColor: 'pink', 
-        borderWidth:3,
+    boxOne:{
+        flex:1,
+        marginTop: 30,
+        alignItems: 'center'
+    },
+    orders_container: {
+        height:'80%',
+        backgroundColor: '#F3F3F3'
+    },
+    order_entry:{
+        height: 150,
+        marginBottom: 20,
+
+    },
+    entry: {
+        backgroundColor: 'white',
+        width: 375,
+        height: 140,
         padding: 10,
-        margin: 5
+        borderRadius: 3,  
     },
     image_button: {
-        width: 20, 
-        height: 20
+        marginTop: 15,
+        marginLeft: 15
+    },
+    bg:{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
+
+    modalContent:{
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'rgba(0,0,0,0.75)'
+      },
+
+    innerContainer:{
+        alignItems: 'center',
+        backgroundColor: '#FFF8F3',
+        borderRadius: 5,
+        paddingBottom: 50,
+        height: 250, //no height
+        width:325, //250 for error
+        marginRight: 50,
+        marginLeft: 50
+    },
+
+    textModal:{
+        fontFamily: 'Roboto',
+        fontSize: 16,
+        color: '#333333'
+    },
+
+
+    imagewarning:{
+        marginBottom:20,
+    },
+
+    buttonModal:{
+        marginTop: 30,
+        width:160,
+        height: 32
+
     },
 });
