@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import * as url from '../constants/urls';
+
 const initialState = {
     auth: false,
     waiter_id: '',
