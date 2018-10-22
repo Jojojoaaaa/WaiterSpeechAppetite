@@ -25,3 +25,6 @@ export const ORDER_DOES_NOT_EXIST = 'Order does not exist.';
 export const NO_ORDER_ENTRY = "You haven't placed an order yet.";
 export const NO_TABLE_NUMBER = "You haven't set the table number yet.";
 export const ORDER_DUPLICATE = 'You already ordered that.';
+
+//generic
+export const SOMETHING_WENT_WRONG = "Something went wrong...";

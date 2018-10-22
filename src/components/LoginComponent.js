@@ -141,6 +141,7 @@ export default function LoginComponent(props) {
                     </View>
                 </Modal> */}
             </View>
+            {props.children}
         </View>
     );
 }
