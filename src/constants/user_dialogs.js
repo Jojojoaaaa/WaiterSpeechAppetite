@@ -28,3 +28,12 @@ export const ORDER_DUPLICATE = 'You already ordered that.';
 
 //generic
 export const SOMETHING_WENT_WRONG = "Something went wrong...";
+
+//prompt
+export const ORDER_TYPE = 'Choose the type of order';
+export const GO_HOME = 'Are you sure? You will lose any entry recorded in this page.';
+export const ORDER_CONFIRMATION = 'Are you sure? You can still make changes if you want.';
+
+//success feed back
+export const SERVE_ORDER = 'The order has been served.';
+export const ORDER_SENT = 'Your order has been placed';

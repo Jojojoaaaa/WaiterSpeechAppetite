@@ -12,11 +12,11 @@ import tryagain from '../assets/modal/btnTryAgain.png';
 import style from '../styles/ErrorPromptStyles';
 
 export default function ErrorPromptComponent(props) {
-    const {hasError, errorMessage, handleError} = props;
+    const {has_error, error_message, handleError} = props;
        
     return (
         <Modal
-            visible={hasError}
+            visible={has_error}
             animationType={'fade'}
             onRequestClose={() => handleError()}
             transparent={true}
@@ -28,7 +28,7 @@ export default function ErrorPromptComponent(props) {
                     source = {warning}>
                 </Image>
                 
-                <Text style={style.textStyle}>{errorMessage}</Text>
+                <Text style={style.textStyle}>{error_message}</Text>
                     <TouchableOpacity onPress={() => handleError()}>
                     <Image
                     style={style.buttonModal}

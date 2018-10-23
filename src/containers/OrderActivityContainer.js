@@ -13,6 +13,7 @@ import {View, Alert, Text} from 'react-native';
 
 import OrderActivityComponent , {OrderEntry} from '../components/OrderActivityComponent';
 import ErrorPromptComponent from '../components/ErrorPromptComponent';
+import OptionPromptComponent from '../components/OptionPromptComponent';
 
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
@@ -30,8 +31,11 @@ class OrderActivityContainer extends Component {
         orders: [],
         total: 0,
         menu: [],
-        hasError: false,
-        errorMessage: ''
+        has_error: false,
+        error_message: '',
+        modal_visible: false,
+        prompt_message: '',
+        prompt_type: ''
       }
     }
 
@@ -161,15 +165,11 @@ class OrderActivityContainer extends Component {
         this.setError(dialog.NO_ORDER_ENTRY);
       }
       else {
-        Alert.alert(
-          'Confirm Order',
-          'Are you sure?',
-          [
-            {text: 'Confirm Order', onPress: () => this.processInsertingOrders()},
-            {text: 'Modify Order'},
-          ],
-          { cancelable: false }
-        )
+        this.setState({
+          modal_visible: true,
+          prompt_type: method.ORDER_CONFIRMATION,
+          prompt_message: dialog.ORDER_CONFIRMATION
+        })
       }
     }
     processInsertingOrders = () => {
@@ -259,15 +259,10 @@ class OrderActivityContainer extends Component {
     }
    
     goToHome = () => {
-      Alert.alert(
-        'Go to Home',
-        'Are you sure? You will lose any entry recorded in this page.',
-        [
-          {text: 'Go Home', onPress: () => this.props.history.push(routes.HOME)},
-          {text: 'Stay'},
-        ],
-        { cancelable: false }
-      )
+      this.setState({
+        modal_visible: true,
+        prompt_type: method.GO_HOME,
+        prompt_message: dialog.GO_HOME})
     }
 
     getAllMenu = () => {
@@ -285,15 +280,19 @@ class OrderActivityContainer extends Component {
   
     setError = (message) => {
       this.setState({
-        hasError: true,
-        errorMessage: message});
+        has_error: true,
+        error_message: message});
     }
     handleError = () => {
       this.setState({
-        hasError: false,
-        errorMessage: "" })
+        has_error: false,
+        error_message: "" })
     }
 
+    closeModal = () => {
+      this.setState({modal_visible:false});
+    }
+  
     findError = (error_code) => {
       switch (error_code) {
         case 1:
@@ -323,8 +322,11 @@ class OrderActivityContainer extends Component {
         orders,
         table_number,
         total,
-        hasError,
-        errorMessage
+        has_error,
+        error_message,
+        modal_visible,
+        prompt_type,
+        prompt_message
       } = this.state;
 
       const startSpeechListener = this.startSpeechListener;
@@ -332,6 +334,18 @@ class OrderActivityContainer extends Component {
       const deleteOrderEntry = this.deleteOrderEntry;
       const goToHome = this.goToHome;
       const handleError = this.handleError;
+      const closeModal = this.closeModal;
+      let optionOne = '';
+      let optionTwo = '';
+
+      if (prompt_type === method.ORDER_CONFIRMATION) {
+          optionOne = this.processInsertingOrders;
+          optionTwo = this.closeModal;
+      }
+      else if (prompt_type === method.GO_HOME) {
+        optionOne = () => this.props.history.push(routes.HOME);
+        optionTwo = this.closeModal;
+      }
       let order_list_display = (
         orders.map(order => {
           return (
@@ -357,9 +371,17 @@ class OrderActivityContainer extends Component {
             goToHome = {goToHome}>
             {order_list_display}
             <ErrorPromptComponent
-                hasError = {hasError}
-                errorMessage = {errorMessage}
+                has_error = {has_error}
+                error_message = {error_message}
                 handleError = {handleError}/>
+            <OptionPromptComponent
+              type={prompt_type}
+              modal_visible={modal_visible}
+              closeModal={closeModal}
+              prompt_message={prompt_message}
+              optionOne={optionOne}
+              optionTwo={optionTwo}
+              />
           </OrderActivityComponent>
         </View>    
       )

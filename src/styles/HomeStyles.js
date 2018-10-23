@@ -38,15 +38,6 @@ export default  style = StyleSheet.create({
         color: '#333333'
     },
 
-    textModal:{
-        fontFamily: 'Roboto',
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 50,
-        color: '#333333'
-    },
-
-
     bg:{
         position: 'absolute',
         width: '100%',
@@ -60,37 +51,4 @@ export default  style = StyleSheet.create({
         height: 30, 
         width: 30
     },
-
-    modalContent:{
-        flex:1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor:'rgba(0,0,0,0.75)'
-      },
-
-    innerContainer:{
-        alignItems: 'center',
-        backgroundColor: '#FFF8F3',
-        borderRadius: 5,
-        paddingBottom: 50,
-        height: 720, //no height
-        width:355, //250 for error
-        marginRight: 50,
-        marginLeft: 50
-    },
-
-    imagewarning:{
-        marginBottom:80,
-    },
-
-    buttonModal:{
-        marginTop: 10,
-        height: 35,
-        width: 175,
-
-    },
-
-
-
-
 });

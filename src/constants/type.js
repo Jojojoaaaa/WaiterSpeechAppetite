@@ -15,3 +15,7 @@ export const ALL = 'All';
 
 export const DINE_IN = 'DINE IN';
 export const TAKE_OUT = 'TAKE OUT';
+
+export const ORDER_CONFIRMATION = 'Order Confirmation';
+export const ORDER_TYPE = 'Order Types';
+export const GO_HOME = 'Go Home';
