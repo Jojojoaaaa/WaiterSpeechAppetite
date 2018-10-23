@@ -14,7 +14,7 @@ import image from '../assets/orderview/Confirm.png';
 export default function SuccessFeedbackComponent(props) {
     const {
         modal_visible,
-        closeModal,
+        buttonHandler,
         feedback,
     } = props; 
     return (
@@ -32,7 +32,7 @@ export default function SuccessFeedbackComponent(props) {
                     
                     <Text style={style.textModal}>{feedback}</Text>
                     
-                    <TouchableOpacity onPress={() => closeModal()}>
+                    <TouchableOpacity onPress={() => buttonHandler()}>
                         <Image
                         style={style.buttonModal}
                             source={close}

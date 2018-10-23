@@ -7,6 +7,7 @@ import axios from '../axios';
 import * as url from '../constants/urls';
 import * as status from '../constants/type';
 import * as  routes from '../constants/routes';
+import * as dialog from '../constants/user_dialogs';
 
 import * as  actions from '../store/actions';
 
@@ -154,7 +155,7 @@ class OrdersViewContainer extends Component {
         const closeModal = this.closeModal;
         const orders_view = 
             (current_orders_view.length > 0)
-            ?
+            ? (
                 current_orders_view.map(order => {
                     return (
                         <OrdersEntry
@@ -168,16 +169,19 @@ class OrdersViewContainer extends Component {
                         />
                     )
                 })
+                )
             :
                 <EmptyOrders/>
 
         return(
             <OrdersViewComponent
                 changeTab={changeTab}
-                goToHome={goToHome}
-                modal_visible={modal_visible}
-                closeModal={closeModal}>
+                goToHome={goToHome}>
             {orders_view}
+            <SuccessFeedbackComponent
+              modal_visible={modal_visible}
+              buttonHandler={closeModal}
+              feedback={dialog.SERVE_ORDER} />
             </OrdersViewComponent>
         )
     }

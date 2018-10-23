@@ -76,7 +76,7 @@ export function OrdersEntry(props) {
 }
 export function EmptyOrders(props) {
     return (
-        <View style={style.empty_orders}>
+        <View style={styles.empty_orders}>
             <Text>No orders for now</Text>
         </View>  
     );
@@ -86,8 +86,6 @@ export default function OrdersViewComponent(props) {
     const{
         changeTab,
         goToHome,
-        modal_visible,
-        closeModal
         } = props;
 
     const tabs = [
@@ -145,7 +143,7 @@ export default function OrdersViewComponent(props) {
         <View style={styles.container}>
             <View style={styles.body}>
                 <Image 
-                    style={style.bg}
+                    style={styles.bg}
                     source={header}></Image>
                 <TouchableNativeFeedback onPress={() => goToHome()}>
                     <Image
@@ -163,30 +161,6 @@ export default function OrdersViewComponent(props) {
                     renderTab={renderTab}
                     tabs={tabs}
                     /> 
-                <Modal
-                    visible={modal_visible}
-                    animationType={'fade'}
-                    onRequestClose={() => closeModal()}
-                    transparent={true}
-                    >
-                    <View style={style.modalContent}>
-                        <View style={style.innerContainer}>
-                            <Image style={style.imagewarning}
-                                source = {illus}>
-                            </Image>
-                            
-                            <Text style={style.textModal}>The order has been served.</Text>
-                            
-                            <TouchableOpacity onPress={() => {closeModal();}}>
-                                <Image
-                                style={style.buttonModal}
-                                    source={close}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
-    
             </View>
         </View>
       )

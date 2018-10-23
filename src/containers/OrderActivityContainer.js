@@ -14,6 +14,7 @@ import {View, Alert, Text} from 'react-native';
 import OrderActivityComponent , {OrderEntry} from '../components/OrderActivityComponent';
 import ErrorPromptComponent from '../components/ErrorPromptComponent';
 import OptionPromptComponent from '../components/OptionPromptComponent';
+import SuccessFeedbackComponent from '../components/SuccessFeedbackComponent';
 
 import * as  dialog from '../constants/user_dialogs';
 import * as  commands from '../constants/speech_commands';
@@ -35,7 +36,8 @@ class OrderActivityContainer extends Component {
         error_message: '',
         modal_visible: false,
         prompt_message: '',
-        prompt_type: ''
+        prompt_type: '',
+        order_confirmed: false
       }
     }
 
@@ -99,7 +101,11 @@ class OrderActivityContainer extends Component {
 
         match = match.split(' ');        
         const qty = parseInt(match[1], 10);
-        const order = match.splice(2).join(' ');
+        let order = match.splice(2).join(' ');
+        let order_words = order.split(' ');
+        order_words = order_words.map(w =>( w.charAt(0).toUpperCase() + w.slice(1)));
+        order = order_words.join(' ');
+        console.log(order);
 
         const order_in_menu = menu.includes(order.toUpperCase());
 
@@ -173,6 +179,7 @@ class OrderActivityContainer extends Component {
       }
     }
     processInsertingOrders = () => {
+      this.closeModal();
       this.insertOrders()
           .then(res => {
             const order_id = res.order_id;
@@ -216,8 +223,7 @@ class OrderActivityContainer extends Component {
       axios.post(this.props.main_url + url.INSERT_ORDER_ITEM, post_data)
         .then(response =>{
           console.log(response);
-          Alert.alert('ORDER CONFIRMED');
-          this.props.history.push(routes.HOME);
+          this.setState({order_confirmed: true});
         })
         .catch(error => console.log(error));
     }
@@ -326,7 +332,8 @@ class OrderActivityContainer extends Component {
         error_message,
         modal_visible,
         prompt_type,
-        prompt_message
+        prompt_message,
+        order_confirmed
       } = this.state;
 
       const startSpeechListener = this.startSpeechListener;
@@ -382,6 +389,11 @@ class OrderActivityContainer extends Component {
               optionOne={optionOne}
               optionTwo={optionTwo}
               />
+            <SuccessFeedbackComponent
+              modal_visible={order_confirmed}
+              feedback={dialog.ORDER_SENT}
+              buttonHandler={() => this.props.history.push(routes.HOME)}
+            />
           </OrderActivityComponent>
         </View>    
       )
