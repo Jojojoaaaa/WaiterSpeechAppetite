@@ -19,29 +19,38 @@ class LoginContainer extends Component {
     this.state = {
       waiter_id: "",
       password: "",
-      modalVisible: false,
-      hasError: false,
-      errorMessage: "",
+      modal_visible: false,
+      has_error: false,
+      error_message: "",
+      ip_address: "",
+      loading: true
     }
   }
 
+  componentDidMount() {
+    this.setState({loading: false});
+  }
+
   openModal = () => {
-    this.setState({modalVisible:true});
+    this.setState({modal_visible:true});
   }
 
   closeModal = () => {
-    this.setState({modalVisible:false});
+    this.setState({modal_visible:false});
   }
   setError = (message) => {
     btn.reset();
     this.setState({
-      hasError: true,
-      errorMessage: message});
+      has_error: true,
+      error_message: message});
   }
   handleError = () => {
     this.setState({
-      hasError: false,
-      errorMessage: "" })
+      has_error: false,
+      error_message: "" })
+  }
+  handleIPAddressChange = (ip_address) => {
+    this.setState({ip_address: ip_address});
   }
   handleLogin = (btn) => {
     console.log('clicku');
@@ -65,16 +74,8 @@ class LoginContainer extends Component {
     catch (error){
       console.log(error);
     }
-     
-    
   }
-  processLogin = (post_data) => {
-    return (
-      axios.post(this.props.main_url + url.LOGIN, post_data)
-      .then(response => response.data)
-      .catch(error => error.message)
-    )
-  }
+  
   validateWaiter = (result_json,btn) => {
     btn.reset();
     if (result_json.result>0){
@@ -94,25 +95,33 @@ class LoginContainer extends Component {
   handleChange = (name, value) => {
     this.setState({[name] : value});
   }
-
+  handleSetIPAddress = () => {
+    const {ip_address} = this.state;
+    this.props.onSetIpAddress(ip_address);
+    this.setState({modal_visible:false});
+  }
   render() {
-    const {modalVisible, hasError, errorMessage} = this.state;
+    const {modal_visible, has_error, error_message} = this.state;
 
     const handleLogin = this.handleLogin;
     const handleChange = this.handleChange;
     const openModal = this.openModal;
     const closeModal = this.closeModal;
     const handleError = this.handleError;
+    const handleIPAddressChange = this.handleIPAddressChange;
+    const handleSetIPAddress = this.handleSetIPAddress;
     return (
       <LoginComponent
         handleLogin = {handleLogin}
         handleChange = {handleChange}
-        modalVisible = {modalVisible}
+        modal_visible = {modal_visible}
         openModal = {openModal}
-        closeModal = {closeModal}>
+        closeModal = {closeModal}
+        handleIPAddressChange = {handleIPAddressChange}
+        handleSetIPAddress = {handleSetIPAddress}>
         <ErrorPromptComponent
-          hasError = {hasError}
-          errorMessage = {errorMessage}
+          has_error = {has_error}
+          error_message = {error_message}
           handleError = {handleError} />
       </LoginComponent>
     );

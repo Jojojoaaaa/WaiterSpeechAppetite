@@ -25,7 +25,7 @@ export const customStyles = {
 }
 export default  style = StyleSheet.create({
     container: {
-        height: '100%'
+        height: '100%',
     },
     body:{
         flex:1
@@ -37,17 +37,25 @@ export default  style = StyleSheet.create({
     },
     orders_container: {
         height:'80%',
-        backgroundColor: '#F3F3F3'
+        width: '90%',
     },
     order_entry:{
-        height: 150,
-        marginBottom: 20,
-
+        marginBottom: 10,
+    },
+    instruction: {
+        alignItems: "flex-end",
+    },
+    empty_orders: {
+        flex: 1,
+        padding: 50,
+        width: '100%',
+        backgroundColor: 'white',
+        color: '#F3F3F3',
+        alignItems: 'center'
     },
     entry: {
         backgroundColor: 'white',
-        width: 375,
-        height: 140,
+        width: '100%',
         padding: 10,
         borderRadius: 3,  
     },
@@ -60,14 +68,12 @@ export default  style = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-
     modalContent:{
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor:'rgba(0,0,0,0.75)'
-      },
-
+    },
     innerContainer:{
         alignItems: 'center',
         backgroundColor: '#FFF8F3',
@@ -85,8 +91,7 @@ export default  style = StyleSheet.create({
         color: '#333333'
     },
 
-
-    imagewarning:{
+    image:{
         marginBottom:20,
     },
 
@@ -94,6 +99,5 @@ export default  style = StyleSheet.create({
         marginTop: 30,
         width:160,
         height: 32
-
     },
 });

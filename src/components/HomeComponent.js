@@ -5,16 +5,12 @@ import {
     Image,
     TouchableNativeFeedback,
     TouchableOpacity,
-    Modal} from 'react-native';
+    } from 'react-native';
 import style from '../styles/HomeStyles';
 import exit from '../assets/home/exit.png';
 import order from '../assets/home/btnOrders.png';
 import mic from '../assets/home/btnMic.png';
 import bg from '../assets/home/homebg.png';
-import dine from '../assets/home/btnDine.png';
-import out from '../assets/home/btnOut.png';
-import type from '../assets/login/settings.png';
-import illus from '../assets/home/illustration.png';
 
 import IconBadge from 'react-native-icon-badge';
 
@@ -23,10 +19,8 @@ export default function HomeComponent(props) {
         speechHandler,
         viewOrders,
         logOutHandler,
-        orders_ready_count,
-        modalVisible,
-        openModal,
-        closeModal} = props;
+        orders_ready_count
+        } = props;
     return (
         <View style = {style.container}>
             <View style = {style.body}>
@@ -40,13 +34,6 @@ export default function HomeComponent(props) {
                         onPress={() => logOutHandler()}>
                         <Image
                             source={exit}>
-                        </Image>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => openModal()}>
-                        <Image
-                            source={type}>
                         </Image>
                     </TouchableOpacity>
 
@@ -87,41 +74,7 @@ export default function HomeComponent(props) {
                             source={mic}/>
                     </TouchableNativeFeedback>   
                 </View> 
-
-
-                    <Modal
-                        visible={modalVisible}
-                        animationType={'fade'}
-                        onRequestClose={() => closeModal()}
-                        transparent={true}
-                        >
-                        <View style={style.modalContent}>
-                            <View style={style.innerContainer}>
-                                <Image style={style.imagewarning}
-                                    source = {illus}>
-                                </Image>
-                                
-                                <Text style={style.textModal}>Choose the type of order</Text>
-                                
-                                <TouchableOpacity onPress={() => {closeModal();}}>
-                                    <Image
-                                    style={style.buttonModal}
-                                        source={dine}
-                                    />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => {closeModal();}}>
-                                    <Image
-                                    style={style.buttonModal}
-                                        source={out}
-                                    />
-                                </TouchableOpacity>
-
-                            </View>
-                        </View>
-                    </Modal>
-
-
+                {props.children}
             </View>
         </View>
     )

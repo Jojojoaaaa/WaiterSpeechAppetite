@@ -12,6 +12,7 @@ import {View, Alert, Text} from 'react-native';
 
 import HomeComponent from '../components/HomeComponent';
 import ErrorPromptComponent from '../components/ErrorPromptComponent';
+import OptionPromptComponent from '../components/OptionPromptComponent';
 
 import * as  commands from '../constants/speech_commands';
 import * as  routes from '../constants/routes';
@@ -27,18 +28,14 @@ class HomeContainer extends Component {
     super(props);
     this.state = {
       speech_listener: '',
-      hasError: false,
-      errorMessage: ''
-      modalVisible: false
+      has_error: false,
+      error_message: '',
+      modal_visible: false,
     }
   }
-
-  openModal = () => {
-    this.setState({modalVisible:true});
-  }
-
+  
   closeModal = () => {
-    this.setState({modalVisible:false});
+    this.setState({modal_visible:false});
   }
 
   componentWillMount () {
@@ -62,7 +59,6 @@ class HomeContainer extends Component {
             speech_listener.setRecognitionListener({
                 onError: event => {
                     this.setError(dialog.SR_FAILED + this.findError(event.error));
-                    //Alert.alert(dialog.SR_FAILED + this.findError(event.error));
                 },
                 onResults: event => {
                     var speech_results = event.results[SpeechRecognizer.RESULTS_RECOGNITION];
@@ -81,15 +77,7 @@ class HomeContainer extends Component {
       }
     });
     if (success) {
-      Alert.alert(
-        'Type of Order',
-        'Choose type of order',
-        [
-          {text: 'Dine In', onPress: () => this.startCreatingOrders(type.DINE_IN)},
-          {text: 'Take Out', onPress: () => this.startCreatingOrders(type.TAKE_OUT)},
-        ],
-        { cancelable: true }
-      ) // to be changed to modal
+      this.setState({modal_visible:true});
     }
     else {
       this.setError(dialog.SPEECH_COMMAND_404)
@@ -153,34 +141,45 @@ class HomeContainer extends Component {
   }
   setError = (message) => {
     this.setState({
-      hasError: true,
-      errorMessage: message});
+      has_error: true,
+      error_message: message});
   }
   handleError = () => {
     this.setState({
-      hasError: false,
-      errorMessage: "" })
+      has_error: false,
+      error_message: "" })
   }
   render() {
-    const {hasError, errorMessage} = this.state;
+    const {
+      has_error, 
+      error_message,
+      modal_visible
+      } = this.state;
     const handleError = this.handleError;
     const speechHandler = this.speechHandler;
     const viewOrders = this.viewOrders;
     const logOutHandler = this.logOutHandler;
     const orders_ready_count = this.props.orders_ready_count;
+    const startCreatingOrders = this.startCreatingOrders;
+    const closeModal = this.closeModal;
       return (
           <HomeComponent
               speechHandler={speechHandler}
               viewOrders={viewOrders}
               logOutHandler={logOutHandler}
-              orders_ready_count={orders_ready_count}
-              modalVisible = {this.state.modalVisible}
-              openModal = {this.openModal}
-              closeModal = {this.closeModal} />
-             <ErrorPromptComponent
-                hasError = {hasError}
-                errorMessage = {errorMessage}
-                handleError = {handleError}/>
+              orders_ready_count={orders_ready_count}>
+            <ErrorPromptComponent
+              has_error = {has_error}
+              error_message = {error_message}
+              handleError = {handleError}/>
+            <OptionPromptComponent
+              type={type.ORDER_TYPE}
+              prompt_message={dialog.ORDER_TYPE}
+              modal_visible={modal_visible}
+              closeModal={closeModal} 
+              optionOne={startCreatingOrders}
+              optionTwo={startCreatingOrders}
+            />
           </HomeComponent>
       )
   }

@@ -7,10 +7,12 @@ import axios from '../axios';
 import * as url from '../constants/urls';
 import * as status from '../constants/type';
 import * as  routes from '../constants/routes';
+import * as dialog from '../constants/user_dialogs';
 
 import * as  actions from '../store/actions';
 
-import OrdersViewComponent, {OrdersEntry} from '../components/OrdersViewComponent';
+import OrdersViewComponent, {OrdersEntry, EmptyOrders} from '../components/OrdersViewComponent';
+import SuccessFeedbackComponent from '../components/SuccessFeedbackComponent';
 
 class OrdersViewContainer extends Component {
     constructor(props) {
@@ -22,18 +24,13 @@ class OrdersViewContainer extends Component {
            orders_paid: [],
            current_orders_view: [],
            active_tab: status.READY,
-           modalVisible: false
+           modal_visible: false
         };
     }
 
-    openModal = () => {
-        this.setState({modalVisible:true});
-    }
-    
     closeModal = () => {
-        this.setState({modalVisible:false});
+        this.setState({modal_visible:false});
     }
-
     componentWillMount() {
         this.groupOrders();
     }
@@ -140,7 +137,7 @@ class OrdersViewContainer extends Component {
         axios.post(this.props.main_url+url.UPDATE_ORDERS_STATUS, post_data)
             .then(response => {
                 if (response.data > 0) {
-                    Alert.alert('*check icon*');
+                    this.setState({modal_visible: true})
                 }
                 else {
                     Alert.alert('*error icon*');
@@ -151,32 +148,40 @@ class OrdersViewContainer extends Component {
             })
     }
     render() {
-        const { current_orders_view } = this.state;
+        const { current_orders_view, modal_visible } = this.state;
         const changeTab = this.changeTab;
         const goToHome = this.goToHome;
         const updateOrdersStatus = this.updateOrdersStatus;
+        const closeModal = this.closeModal;
+        const orders_view = 
+            (current_orders_view.length > 0)
+            ? (
+                current_orders_view.map(order => {
+                    return (
+                        <OrdersEntry
+                            key = {order.order_id}
+                            pos = {order.pos}
+                            table_number = {order.table_number}
+                            order_id = {order.order_id}
+                            order_status = {order.status}
+                            updateOrdersStatus = {updateOrdersStatus}
+                            
+                        />
+                    )
+                })
+                )
+            :
+                <EmptyOrders/>
 
-        const orders_view = current_orders_view.map(order => {
-            return (
-                <OrdersEntry
-                    key = {order.order_id}
-                    pos = {order.pos}
-                    table_number = {order.table_number}
-                    order_id = {order.order_id}
-                    order_status = {order.status}
-                    updateOrdersStatus = {updateOrdersStatus}
-                    
-                />
-            )
-        });
         return(
             <OrdersViewComponent
                 changeTab={changeTab}
-                goToHome={goToHome}
-                modalVisible = {this.state.modalVisible}
-                openModal = {this.openModal}
-                closeModal = {this.closeModal}>
+                goToHome={goToHome}>
             {orders_view}
+            <SuccessFeedbackComponent
+              modal_visible={modal_visible}
+              buttonHandler={closeModal}
+              feedback={dialog.SERVE_ORDER} />
             </OrdersViewComponent>
         )
     }

@@ -14,11 +14,9 @@ import BottomNavigation, { FullTab } from 'react-native-material-bottom-navigati
 
 import back from '../assets/orderview/btnBack.png';
 import header from '../assets/orderview/header.png';
-import entry from '../assets/orderview/order-list.png';
 import close from '../assets/orderview/btnClose.png';
-import out from '../assets/home/btnOut.png';
-import type from '../assets/login/settings.png';
 import illus from '../assets/orderview/Confirm.png';
+
 
 import * as status from '../constants/type';
 
@@ -46,8 +44,6 @@ export function OrdersEntry(props) {
       ]
 
     let orders_entry = (    
-        <View style = {styles.order_entry}> 
-            
             <View style = {styles.entry}>
                 <Text style={{marginBottom:5}}>Table Number: {table_number}</Text>
                 <Text style={{marginBottom:15}}>Order ID: {order_id}</Text>
@@ -57,33 +53,40 @@ export function OrdersEntry(props) {
                     labels={labels}
                     stepCount={count}
                 />
-            </View>
-            <View style={{height:20, alignItems:'flex-end'}}>
-                <Text>Swipe right to serve >>   </Text>
-            </View>          
+           
         </View>  
     )
     return (
-        (status.READY_CHECK.test(order_status)) 
+        <View style = {styles.order_entry}>
+        {(status.READY_CHECK.test(order_status)) 
         ?
-        <Swipeout
-            left={swipeoutBtns} 
-            backgroundColor={'transparent'}
-            autoClose={true}
-            style={{height:140, marginBottom:8}}> 
-            {orders_entry}
-        </Swipeout>
+            <Swipeout
+                left={swipeoutBtns} 
+                backgroundColor={'transparent'}
+                autoClose={true}> 
+                {orders_entry}
+            <View style={style.instruction}>
+                <Text>Swipe right to serve >>   </Text>
+            </View>          
+            </Swipeout>
         : 
-        orders_entry
+        orders_entry}
+        </View>
     )
 }
+export function EmptyOrders(props) {
+    return (
+        <View style={styles.empty_orders}>
+            <Text>No orders for now</Text>
+        </View>  
+    );
+}
+
 export default function OrdersViewComponent(props) {
     const{
         changeTab,
         goToHome,
-        modalVisible,
-        openModal,
-        closeModal} = props;
+        } = props;
 
     const tabs = [
         {
@@ -140,22 +143,16 @@ export default function OrdersViewComponent(props) {
         <View style={styles.container}>
             <View style={styles.body}>
                 <Image 
-                    style={style.bg}
+                    style={styles.bg}
                     source={header}></Image>
                 <TouchableNativeFeedback onPress={() => goToHome()}>
                     <Image
                     style={styles.image_button}
                     source={back}/>
                 </TouchableNativeFeedback>
-                <TouchableOpacity
-                    onPress={() => openModal()}>
-                    <Image
-                        style={{marginLeft: 15}}
-                        source={type}>
-                    </Image>
-                </TouchableOpacity>
                 <View style={styles.boxOne}>
-                    <ScrollView style={styles.orders_container}>
+                    <ScrollView 
+                        style={styles.orders_container}>
                         {props.children}
                     </ScrollView>
                 </View>
@@ -164,31 +161,6 @@ export default function OrdersViewComponent(props) {
                     renderTab={renderTab}
                     tabs={tabs}
                     /> 
-
-                <Modal
-                    visible={modalVisible}
-                    animationType={'fade'}
-                    onRequestClose={() => closeModal()}
-                    transparent={true}
-                    >
-                    <View style={style.modalContent}>
-                        <View style={style.innerContainer}>
-                            <Image style={style.imagewarning}
-                                source = {illus}>
-                            </Image>
-                            
-                            <Text style={style.textModal}>The order has been served.</Text>
-                            
-                            <TouchableOpacity onPress={() => {closeModal();}}>
-                                <Image
-                                style={style.buttonModal}
-                                    source={close}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
-    
             </View>
         </View>
       )

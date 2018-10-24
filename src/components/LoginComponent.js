@@ -11,7 +11,7 @@ import style from '../styles/LoginStyles';
 import img from '../assets/login/Waiter.png';
 import settings from '../assets/login/settings.png';
 import warning from '../assets/modal/Settings.png';
-import tryagain from '../assets/modal/btnChange.png';
+import btn_change from '../assets/modal/btnChange.png';
 import Btn from 'react-native-micro-animated-button';
 import {Fumi }  from 'react-native-textinput-effects';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -25,9 +25,11 @@ buttonStyles = {
 export default function LoginComponent(props) {
     const { handleLogin,
             handleChange,
-            modalVisible,
+            modal_visible,
             openModal,
-            closeModal
+            closeModal,
+            handleIPAddressChange,
+            handleSetIPAddress
             } = props;
     
     return (
@@ -85,10 +87,11 @@ export default function LoginComponent(props) {
                 </View>
                 
                 <Modal
-                    visible={modalVisible}
+                    visible={modal_visible}
                     animationType={'fade'}
                     onRequestClose={() => closeModal()}
-                    transparent={true}
+                    transpaprent={true}
+                    cancelable={true}
                     >
                     <View style={style.modalContent}>
                         <View style={style.innerContainer}>
@@ -96,7 +99,7 @@ export default function LoginComponent(props) {
                                 source = {warning}>
                             </Image>
                             
-                            <Text style={style.textStyle}>Please enter the IP Address to change.</Text>
+                            <Text style={style.textStyle}>Please enter the IP Address to change. (e.g. 10.0.1.1)</Text>
 
                             <Fumi
                                 style={style.text_input}
@@ -105,41 +108,18 @@ export default function LoginComponent(props) {
                                 iconName={'settings'}
                                 iconColor={'black'}
                                 iconSize={20}
+                                onChangeText ={(text) => handleIPAddressChange(text)}
                             />
                             
-                            <TouchableOpacity onPress={() => {closeModal();}}>
+                            <TouchableOpacity onPress={() => handleSetIPAddress()}>
                                 <Image
-                                style={style.buttonModal}
-                                    source={tryagain}
+                                    style={style.buttonModal}
+                                    source={btn_change}
                                 />
                             </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
-
-                {/* <Modal
-                    visible={modalVisible}
-                    animationType={'fade'}
-                    onRequestClose={() => closeModal()}
-                    transparent={true}
-                    >
-                    <View style={style.modalContent}>
-                    
-                        <View style={style.innerContainer}>
-                        <Image style={style.imagewarning}
-                            source = {warning}>
-                        </Image>
-                        
-                        <Text style={style.textStyle}>Waiter ID does not exist!</Text>
-                        <TouchableOpacity onPress={() => {closeModal();}}>
-                            <Image
-                            style={style.buttonModal}
-                                source={tryagain}
-                            />
-                        </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal> */}
             </View>
             {props.children}
         </View>
