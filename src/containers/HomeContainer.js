@@ -28,7 +28,7 @@ class HomeContainer extends Component {
     this.state = {
       speech_listener: '',
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
       modalVisible: false
     }
   }
@@ -176,7 +176,7 @@ class HomeContainer extends Component {
               orders_ready_count={orders_ready_count}
               modalVisible = {this.state.modalVisible}
               openModal = {this.openModal}
-              closeModal = {this.closeModal} />
+              closeModal = {this.closeModal}>
              <ErrorPromptComponent
                 hasError = {hasError}
                 errorMessage = {errorMessage}

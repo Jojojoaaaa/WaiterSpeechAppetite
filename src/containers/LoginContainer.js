@@ -68,13 +68,7 @@ class LoginContainer extends Component {
      
     
   }
-  processLogin = (post_data) => {
-    return (
-      axios.post(this.props.main_url + url.LOGIN, post_data)
-      .then(response => response.data)
-      .catch(error => error.message)
-    )
-  }
+
   validateWaiter = (result_json,btn) => {
     btn.reset();
     if (result_json.result>0){
