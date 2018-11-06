@@ -9,11 +9,12 @@ export default style = StyleSheet.create({
       },
 
     innerContainer:{
+        //justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FFF8F3',
         borderRadius: 5,
         paddingBottom: 50,
-        height: '95%',
+        height: '90%',
         width: '90%',
         marginRight: 50,
         marginLeft: 50
@@ -35,6 +36,7 @@ export default style = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         height: '10%',
-        color: '#333333'
+        color: '#333333',
+        textAlign: 'center'
     },
 });

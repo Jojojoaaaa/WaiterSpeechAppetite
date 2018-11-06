@@ -13,11 +13,11 @@ export const SR_BUSY = 'Network busy!';
 
 //input mismatches 
 export const INCORRECT_PASSWORD = 'Your password is incorrect!';
-export const NO_WAITER_ID = 'Waiter ID does not exist! Please try again!';
+export const NO_WAITER_ID = 'Waiter ID does not exist! \nPlease try again!';
 
 export const SR_UNAVAILABLE = 'Speech recognizer is not available';
-export const SR_FAILED = 'Ooops! Something went wrong...\n';
-export const SPEECH_COMMAND_404 = 'Cannot recognize speech command \nPlease try again...';
+export const SR_FAILED = 'Ooops! Something went wrong.\n';
+export const SPEECH_COMMAND_404 = 'Cannot recognize speech command. \nPlease try again.';
 
 //order entry feedback
 export const NOT_ENOUGH_SERVINGS = 'Sorry, the order you requested does not have enough servings.';
@@ -27,12 +27,12 @@ export const NO_TABLE_NUMBER = "You haven't set the table number yet.";
 export const ORDER_DUPLICATE = 'You already ordered that.';
 
 //generic
-export const SOMETHING_WENT_WRONG = "Something went wrong...";
+export const SOMETHING_WENT_WRONG = "Something went wrong!";
 
 //prompt
 export const ORDER_TYPE = 'Choose the type of order';
-export const GO_HOME = 'Are you sure? You will lose any entry recorded in this page.';
-export const ORDER_CONFIRMATION = 'Are you sure? You can still make changes if you want.';
+export const GO_HOME = 'Are you sure? \nYou will lose any entry recorded in this page.';
+export const ORDER_CONFIRMATION = 'Are you sure? \nYou can still make changes if you want.';
 
 //success feed back
 export const SERVE_ORDER = 'The order has been served.';

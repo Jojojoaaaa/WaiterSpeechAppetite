@@ -44,7 +44,9 @@ export default  style = StyleSheet.create({
     },
 
     textStyle:{
-        fontSize: 16
+        textAlign: 'center',
+        fontSize: 16,
+        marginBottom: 15
     },
 
     text_input: {
