@@ -14,16 +14,16 @@ export default style = StyleSheet.create({
         backgroundColor: '#F9F9F9',
         borderRadius: 5,
         paddingBottom: 50,
-        width:250,
         marginRight: 50,
         marginLeft: 50
     },
 
     imagewarning:{
-        marginBottom:30
+        marginBottom:30,
     },
 
     textStyle:{
+        alignContent: 'center',
         fontSize: 16
     },
 

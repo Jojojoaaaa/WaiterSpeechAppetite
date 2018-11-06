@@ -2,8 +2,8 @@ import {StyleSheet} from 'react-native';
 
 export default  style = StyleSheet.create({
     category_image: {
-        width: "90%", 
-        height: "90%"
+        width: "80%", 
+        height: "100%",
     },
     home_button: {
         width: 30, 
@@ -24,7 +24,7 @@ export default  style = StyleSheet.create({
         flex:1,
     },
     box_nav:{
-        flex:0.3,
+        flex:0.5,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

@@ -99,7 +99,8 @@ export default function LoginComponent(props) {
                                 source = {warning}>
                             </Image>
                             
-                            <Text style={style.textStyle}>Please enter the IP Address to change. (e.g. 10.0.1.1)</Text>
+                            <Text style={style.textStyle}>Please enter the IP Address to change.</Text>
+                            <Text style={style.textStyle}>(e.g. 10.0.1.1)</Text>
 
                             <Fumi
                                 style={style.text_input}
