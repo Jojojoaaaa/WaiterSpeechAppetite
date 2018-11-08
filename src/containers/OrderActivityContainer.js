@@ -382,7 +382,7 @@ class OrderActivityContainer extends Component {
                 error_message = {error_message}
                 handleError = {handleError}/>
             <OptionPromptComponent
-              type={prompt_type}
+              prompt_type={prompt_type}
               modal_visible={modal_visible}
               closeModal={closeModal}
               prompt_message={prompt_message}

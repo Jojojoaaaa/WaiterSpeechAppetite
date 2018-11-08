@@ -14,14 +14,14 @@ export default style = StyleSheet.create({
         backgroundColor: '#FFF8F3',
         borderRadius: 5,
         paddingBottom: 50,
-        height: '90%',
+        height: '95%',
         width: '90%',
         marginRight: 50,
         marginLeft: 50
     },
 
     image:{
-        marginBottom:80,
+        marginBottom:50,
     },
 
     buttonModal:{
@@ -35,7 +35,7 @@ export default style = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 18,
         fontWeight: 'bold',
-        height: '10%',
+        height: '15%',
         color: '#333333',
         textAlign: 'center'
     },
