@@ -173,7 +173,7 @@ class HomeContainer extends Component {
               error_message = {error_message}
               handleError = {handleError}/>
             <OptionPromptComponent
-              type={type.ORDER_TYPE}
+              prompt_type={type.ORDER_TYPE}
               prompt_message={dialog.ORDER_TYPE}
               modal_visible={modal_visible}
               closeModal={closeModal} 
