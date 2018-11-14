@@ -22,21 +22,31 @@ export default  style = StyleSheet.create({
     },
     body:{
         flex:1,
+        backgroundColor: '#E5E5E5',
+    },
+    
+    box_start:{
+        backgroundColor: 'green',
+        flex:1.5,
     },
     box_nav:{
         flex:0.5,
+        //backgroundColor: 'red',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginRight: 15,
     },
-    box_start:{
-        flex:1,
+    box_total:{
+        //backgroundColor: 'green',
+        flex: 1,
         justifyContent: 'flex-end',
         paddingLeft: 15,
         paddingBottom: 15
+
     },
-    order_bg:{
+
+    header:{
         position:'absolute',
         height: '100%',
         width: '100%'
@@ -46,7 +56,7 @@ export default  style = StyleSheet.create({
     },
     orders_container: {
         height: '100%',
-        //backgroundColor: '#f6f6f6' 
+        
     },
     orders_body:{
         flex: 1,
@@ -54,7 +64,7 @@ export default  style = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         backgroundColor: 'white',
-        marginBottom: 5
+        marginBottom: 3
     },
     box_end:{
         flex: 1,

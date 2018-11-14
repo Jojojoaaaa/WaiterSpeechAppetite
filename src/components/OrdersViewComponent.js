@@ -37,6 +37,7 @@ export function OrdersEntry(props) {
 
     var swipeoutBtns = [
         {
+          
           text: 'Serve',
           backgroundColor: '#4B9051',
           onPress: () => {updateOrdersStatus(order_id, status.SERVED)}
@@ -61,13 +62,14 @@ export function OrdersEntry(props) {
         {(status.READY_CHECK.test(order_status)) 
         ?
             <Swipeout
+                
                 left={swipeoutBtns} 
                 backgroundColor={'transparent'}
                 autoClose={true}> 
                 {orders_entry}
-            <View style={style.instruction}>
-                <Text>Swipe right to serve >>   </Text>
-            </View>          
+                <View>
+                <Text> Swipe right to serve >>   </Text>
+                </View>
             </Swipeout>
         : 
         orders_entry}

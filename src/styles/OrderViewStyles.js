@@ -42,9 +42,7 @@ export default  style = StyleSheet.create({
     order_entry:{
         marginBottom: 10,
     },
-    instruction: {
-        alignItems: "flex-end",
-    },
+
     empty_orders: {
         flex: 1,
         padding: 50,

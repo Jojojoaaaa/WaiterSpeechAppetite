@@ -11,7 +11,8 @@ import home from '../assets/orderview/btnBack.png';
 import add from '../assets/orderact/btnAdd.png';
 import sub from '../assets/orderact/btnMinus.png';
 import mic from '../assets/home/btnMic.png';
-import orderbg from '../assets/orderact/orderbg.png';
+import header from '../assets/orderact/activityheader.png';
+import footer from '../assets/orderact/footer.png';
 
 
 import {
@@ -92,21 +93,23 @@ export default function OrderActivityComponent(props) {
 
     return (
         <View style ={style.container}>
-            <View style ={style.body}>
-                <Image style={style.order_bg}
-                source={orderbg}></Image>
-
-                <View style={style.box_nav}>
-                    <TouchableOpacity
-                            onPress={() => goToHome()}>
-                        <Image
-                        style={style.home_button}
-                        source={home}/>
-                    </TouchableOpacity>
-                    <Text style={{fontSize: 24, color: 'white', fontWeight: 'bold'}}>Table No. {table_number}</Text> 
-                </View>
+            <View style ={style.body}>   
                 <View style={style.box_start}>
-                    <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>TOTAL: Php {total}</Text>
+                 <Image style={style.header}
+                    source={header}></Image>
+                    <View style={style.box_nav}>
+                        <TouchableOpacity
+                                onPress={() => goToHome()}>
+                            <Image
+                            style={style.home_button}
+                            source={home}/>
+                        </TouchableOpacity>
+                        <Text style={{fontSize: 24, color: 'white', fontWeight: 'bold'}}>Table No. {table_number}</Text> 
+                    </View>
+                   
+                    <View style={style.box_total}>
+                        <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>TOTAL: Php {total}</Text>
+                    </View>    
                 </View>
                 <View style={style.box_mid}>
                 <ScrollView style={style.orders_container}>
@@ -114,6 +117,8 @@ export default function OrderActivityComponent(props) {
                 </ScrollView>
                 </View>
                 <View style={style.box_end}>
+                 <Image style={style.header}
+                    source={footer}></Image>
                     <TouchableOpacity
                         onPress={() => startSpeechListener()}>
                         <Image
