@@ -7,7 +7,7 @@ import {
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-native'
 import axios from '../axios';
-
+import moment from 'moment';
 import {View, Alert, Text} from 'react-native';
 
 import HomeComponent from '../components/HomeComponent';
