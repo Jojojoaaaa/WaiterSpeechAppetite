@@ -113,7 +113,9 @@ class HomeContainer extends Component {
     }
   }
   getAllOrdersRecord = () => {
-    const post_data = {waiter_id: this.props.waiter_id}
+    const date = moment().format('LL');
+    const post_data = {waiter_id: this.props.waiter_id, date:date}
+
       axios.post(this.props.main_url + url.RETRIEVE_ORDERS, post_data)
         .then(response => {
             const orders_record = response.data;

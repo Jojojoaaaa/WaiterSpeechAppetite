@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Alert } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import axios from '../axios';
 import * as url from '../constants/urls';
@@ -74,7 +75,10 @@ class OrdersViewContainer extends Component {
        console.log('re render');
     }
     getAllOrdersRecord = () => {
-        const post_data = {waiter_id: this.props.waiter_id}
+        const date = moment().format('LL');
+        const post_data = {
+            waiter_id: this.props.waiter_id,
+            date: date}
 
           axios.post(this.props.main_url + url.RETRIEVE_ORDERS, post_data)
             .then(response => {
